@@ -161,7 +161,7 @@
     letter-spacing: 0.35em;
     color: var(--pink);
     text-transform: uppercase;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
   }
 
   .tagline {
@@ -169,7 +169,17 @@
     letter-spacing: 0.25em;
     color: var(--dim);
     text-transform: uppercase;
-    margin-bottom: 52px;
+    margin-bottom: 8px;
+  }
+
+  .descriptor {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: clamp(13px, 2vw, 16px);
+    letter-spacing: 0.12em;
+    color: var(--text);
+    margin-bottom: 48px;
+    opacity: 0.8;
   }
 
   .cursor-blink {
@@ -201,6 +211,7 @@
     text-transform: uppercase;
     transition: all 0.2s;
     overflow: hidden;
+    cursor: pointer;
   }
 
   .link-item::before {
@@ -238,6 +249,25 @@
 
   .link-item:hover .link-icon { opacity: 1; }
 
+  /* ── COPY TOAST ── */
+  #toast {
+    position: fixed;
+    bottom: 32px; left: 50%; transform: translateX(-50%);
+    background: var(--pink-hot);
+    color: #080808;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 10px 20px;
+    z-index: 999;
+    opacity: 0;
+    transition: opacity 0.2s;
+    pointer-events: none;
+  }
+
+  #toast.show { opacity: 1; }
+
   footer {
     margin-top: 64px;
     font-size: 9px;
@@ -257,6 +287,9 @@
 </head>
 <body>
 
+<!-- TOAST -->
+<div id="toast">Email copied</div>
+
 <!-- GLITCH INTRO -->
 <div id="intro">
   <div class="glitch-wrap">
@@ -273,11 +306,13 @@
 <div id="main">
   <img class="logo-static" src="Logo_No_Background_Vector.svg" alt="Lyras Winter">
   <div class="wordmark">Lyra's Winter</div>
-  <div class="tagline">art &nbsp;·&nbsp; stream &nbsp;·&nbsp; studio<span class="cursor-blink"></span></div>
+  <div class="tagline">artist &nbsp;·&nbsp; model &nbsp;·&nbsp; creator<span class="cursor-blink"></span></div>
+  <div class="descriptor">Creative Director &amp; Commission Artist</div>
 
   <div class="links">
 
-    <a class="link-item" href="mailto:lyraswinter@proton.me">
+    <!-- EMAIL — copies on desktop, mailto on mobile -->
+    <a class="link-item" id="email-btn" href="mailto:lyraswinter@proton.me">
       <svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
         <rect x="2" y="4" width="20" height="16" rx="2"/>
         <polyline points="2,4 12,13 22,4"/>
@@ -285,6 +320,7 @@
       <span class="link-label">Email</span>
     </a>
 
+    <!-- INSTAGRAM -->
     <a class="link-item" href="https://www.instagram.com/lyraswinter/" target="_blank" rel="noopener">
       <svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
         <rect x="2" y="2" width="20" height="20" rx="5"/>
@@ -294,6 +330,7 @@
       <span class="link-label">Instagram</span>
     </a>
 
+    <!-- TWITCH -->
     <a class="link-item" href="https://www.twitch.tv/lyraswinter" target="_blank" rel="noopener">
       <svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
         <path d="M21 2H3v16h5v4l4-4h5l4-4V2zM11 11V7m4 4V7"/>
@@ -303,8 +340,30 @@
 
   </div>
 
-  <footer>© Lyra Winter &nbsp;·&nbsp; art · stream · studio</footer>
+  <footer>© 2026 Lyra Winter</footer>
 </div>
+
+<script>
+  const emailBtn = document.getElementById('email-btn');
+  const toast = document.getElementById('toast');
+  let toastTimer;
+
+  function showToast() {
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 2000);
+  }
+
+  emailBtn.addEventListener('click', function(e) {
+    // Detect if mobile (has touch AND no fine pointer)
+    const isMobile = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+    if (!isMobile) {
+      e.preventDefault();
+      navigator.clipboard.writeText('lyraswinter@proton.me').then(showToast);
+    }
+    // On mobile — let the mailto: link do its thing
+  });
+</script>
 
 </body>
 </html>
