@@ -169,17 +169,7 @@
     letter-spacing: 0.25em;
     color: var(--dim);
     text-transform: uppercase;
-    margin-bottom: 8px;
-  }
-
-  .descriptor {
-    font-family: 'Cormorant Garamond', serif;
-    font-style: italic;
-    font-size: clamp(13px, 2vw, 16px);
-    letter-spacing: 0.12em;
-    color: var(--text);
-    margin-bottom: 48px;
-    opacity: 0.8;
+    margin-bottom: 36px;
   }
 
   .cursor-blink {
@@ -193,6 +183,54 @@
 
   @keyframes blink { 50% { opacity:0; } }
 
+  /* ── SOCIAL ICONS ── */
+  .social-icons {
+    display: flex;
+    gap: 28px;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 36px;
+  }
+
+  .social-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px; height: 44px;
+    border: 1px solid var(--dim);
+    color: var(--text);
+    text-decoration: none;
+    transition: all 0.2s;
+    position: relative;
+  }
+
+  .social-icon svg {
+    width: 20px; height: 20px;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+  }
+
+  .social-icon:hover {
+    border-color: var(--pink);
+    color: var(--pink);
+    background: rgba(232,160,180,0.06);
+    transform: translateY(-3px);
+    filter: drop-shadow(0 4px 12px rgba(212,96,122,0.3));
+  }
+
+  .social-icon:hover svg { opacity: 1; }
+
+  /* divider */
+  .divider {
+    width: 100%;
+    max-width: 360px;
+    height: 1px;
+    background: var(--dim);
+    opacity: 0.4;
+    margin-bottom: 28px;
+  }
+
+  /* ── LINKS ── */
   .links {
     display: flex; flex-direction: column; gap: 14px;
     width: 100%; max-width: 360px;
@@ -249,7 +287,22 @@
 
   .link-item:hover .link-icon { opacity: 1; }
 
-  /* ── COPY TOAST ── */
+  /* coming soon */
+  .link-item.soon {
+    opacity: 0.35;
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .soon-tag {
+    margin-left: auto;
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    color: var(--dim);
+    text-transform: uppercase;
+  }
+
+  /* ── TOAST ── */
   #toast {
     position: fixed;
     bottom: 32px; left: 50%; transform: translateX(-50%);
@@ -287,7 +340,6 @@
 </head>
 <body>
 
-<!-- TOAST -->
 <div id="toast">Email copied</div>
 
 <!-- GLITCH INTRO -->
@@ -307,11 +359,41 @@
   <img class="logo-static" src="Logo_No_Background_Vector.svg" alt="Lyras Winter">
   <div class="wordmark">Lyra's Winter</div>
   <div class="tagline">artist &nbsp;·&nbsp; model &nbsp;·&nbsp; creator<span class="cursor-blink"></span></div>
-  <div class="descriptor">Creative Director &amp; Commission Artist</div>
 
+  <!-- SOCIAL ICONS -->
+  <div class="social-icons">
+
+    <!-- Instagram -->
+    <a class="social-icon" href="https://www.instagram.com/lyraswinter/" target="_blank" rel="noopener" aria-label="Instagram">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <rect x="2" y="2" width="20" height="20" rx="5"/>
+        <circle cx="12" cy="12" r="4"/>
+        <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/>
+      </svg>
+    </a>
+
+    <!-- Twitter/X -->
+    <a class="social-icon" href="https://x.com/LyrasWinter" target="_blank" rel="noopener" aria-label="Twitter / X">
+      <svg viewBox="0 0 24 24" fill="currentColor">
+        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.253 5.622 5.911-5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+      </svg>
+    </a>
+
+    <!-- Discord -->
+    <a class="social-icon" href="https://discord.gg/T4NuWy6J" target="_blank" rel="noopener" aria-label="Discord">
+      <svg viewBox="0 0 24 24" fill="currentColor">
+        <path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.04.03.05a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/>
+      </svg>
+    </a>
+
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- LINKS -->
   <div class="links">
 
-    <!-- EMAIL — copies on desktop, mailto on mobile -->
+    <!-- EMAIL -->
     <a class="link-item" id="email-btn" href="mailto:lyraswinter@proton.me">
       <svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
         <rect x="2" y="4" width="20" height="16" rx="2"/>
@@ -320,23 +402,26 @@
       <span class="link-label">Email</span>
     </a>
 
-    <!-- INSTAGRAM -->
-    <a class="link-item" href="https://www.instagram.com/lyraswinter/" target="_blank" rel="noopener">
+    <!-- MODELING — coming soon -->
+    <div class="link-item soon">
       <svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-        <rect x="2" y="2" width="20" height="20" rx="5"/>
-        <circle cx="12" cy="12" r="4"/>
-        <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/>
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+        <circle cx="12" cy="7" r="4"/>
       </svg>
-      <span class="link-label">Instagram</span>
-    </a>
+      <span class="link-label">Modelling</span>
+      <span class="soon-tag">Soon</span>
+    </div>
 
-    <!-- TWITCH -->
-    <a class="link-item" href="https://www.twitch.tv/lyraswinter" target="_blank" rel="noopener">
+    <!-- SALES — coming soon -->
+    <div class="link-item soon">
       <svg class="link-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-        <path d="M21 2H3v16h5v4l4-4h5l4-4V2zM11 11V7m4 4V7"/>
+        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+        <line x1="3" y1="6" x2="21" y2="6"/>
+        <path d="M16 10a4 4 0 0 1-8 0"/>
       </svg>
-      <span class="link-label">Twitch</span>
-    </a>
+      <span class="link-label">Art Sales</span>
+      <span class="soon-tag">Soon</span>
+    </div>
 
   </div>
 
@@ -355,13 +440,11 @@
   }
 
   emailBtn.addEventListener('click', function(e) {
-    // Detect if mobile (has touch AND no fine pointer)
     const isMobile = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
     if (!isMobile) {
       e.preventDefault();
       navigator.clipboard.writeText('lyraswinter@proton.me').then(showToast);
     }
-    // On mobile — let the mailto: link do its thing
   });
 </script>
 
