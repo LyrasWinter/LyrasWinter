@@ -431,6 +431,21 @@
 </div>
 
 <script>
+  // Skip glitch intro if already visited this session
+  const intro = document.getElementById('intro');
+  const main = document.getElementById('main');
+
+  if (sessionStorage.getItem('visited')) {
+    // Skip straight to main — no glitch
+    intro.style.display = 'none';
+    main.style.opacity = '1';
+    main.style.animation = 'none';
+  } else {
+    // First visit — play glitch, then mark as visited
+    sessionStorage.setItem('visited', 'true');
+  }
+
+  // Email copy on desktop
   const emailBtn = document.getElementById('email-btn');
   const toast = document.getElementById('toast');
   let toastTimer;
