@@ -225,14 +225,27 @@
   /* fw3 — below the eyes */
   #fw3 { bottom: -28px; left: 50%; transform: translateX(-50%); }
 
-  /* ── PAGE FADE OUT ── */
-  @keyframes pageFade {
+  /* ── DRAMATIC DISSOLVE ── */
+  @keyframes fadeEl {
+    0%   { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-12px); }
+  }
+
+  @keyframes fadeElDown {
+    0%   { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(12px); }
+  }
+
+  @keyframes fadeElSlow {
     0%   { opacity: 1; }
     100% { opacity: 0; }
   }
 
+  .dissolve-up   { animation: fadeEl 0.9s ease forwards; }
+  .dissolve-down { animation: fadeElDown 0.9s ease forwards; }
+  .dissolve-slow { animation: fadeElSlow 1.2s ease forwards; }
+
   #main.fading {
-    animation: pageFade 1.4s ease forwards;
     pointer-events: none;
   }
 
@@ -597,9 +610,37 @@
     else if (clickCount === 7) {
       glitchLogo('logo-g4');
       main.classList.add('fading');
+
+      // Grab all the dissolving elements
+      const nav        = document.querySelector('nav');
+      const links      = document.querySelector('.links');
+      const footer     = document.querySelector('footer');
+      const tagline    = document.querySelector('.tagline');
+      const wordmark   = document.querySelector('.wordmark');
+      const socialIcons = document.querySelector('.social-icons');
+      const divider    = document.querySelector('.divider');
+      const logoWrap   = document.getElementById('logo-wrap');
+      const floatWords = document.querySelectorAll('.float-word');
+
+      // Sequential dissolve — each with a slight delay
+      setTimeout(() => { if(nav) nav.classList.add('dissolve-up'); }, 0);
+      setTimeout(() => { if(links) links.classList.add('dissolve-down'); }, 150);
+      setTimeout(() => { if(footer) footer.classList.add('dissolve-down'); }, 200);
+      setTimeout(() => { if(socialIcons) socialIcons.classList.add('dissolve-up'); }, 280);
+      setTimeout(() => { if(divider) divider.classList.add('dissolve-slow'); }, 320);
+      setTimeout(() => { if(tagline) tagline.classList.add('dissolve-up'); }, 380);
+      setTimeout(() => { if(wordmark) wordmark.classList.add('dissolve-up'); }, 480);
+      // Float words drift and fade
+      floatWords.forEach((fw, i) => {
+        setTimeout(() => { fw.style.transition = 'opacity 0.8s ease'; fw.style.opacity = '0'; }, 300 + i * 120);
+      });
+      // Logo dissolves last
+      setTimeout(() => { if(logoWrap) logoWrap.classList.add('dissolve-slow'); }, 700);
+
+      // Navigate after everything has faded
       setTimeout(() => {
         window.location.href = 'journal.html';
-      }, 1600);
+      }, 1800);
       return;
     }
 
