@@ -210,16 +210,41 @@
     transition: opacity 1.8s ease;
     z-index: 3;
     white-space: nowrap;
+    text-align: center;
   }
 
   .float-word.visible { opacity: 0.5; }
 
-  /* Position each line in a different spot around the eyes */
+  /* fw1 — above the eyes */
   #fw1 { top: -28px; left: 50%; transform: translateX(-50%); }
-  #fw2 { bottom: 18%; right: -8%; transform: translateX(8%); }
-  #fw3 { bottom: -24px; left: 50%; transform: translateX(-50%); }
 
-  /* ── GLITCH KEYFRAMES — escalating intensity ── */
+  /* fw2a and fw2b — stacked in the centre of the eyes */
+  #fw2a { top: 38%; left: 50%; transform: translateX(-50%); }
+  #fw2b { top: 52%; left: 50%; transform: translateX(-50%); }
+
+  /* fw3 — below the eyes */
+  #fw3 { bottom: -28px; left: 50%; transform: translateX(-50%); }
+
+  /* ── PAGE FADE OUT ── */
+  @keyframes pageFade {
+    0%   { opacity: 1; }
+    100% { opacity: 0; }
+  }
+
+  #main.fading {
+    animation: pageFade 1.4s ease forwards;
+    pointer-events: none;
+  }
+
+  .logo-g1 { animation: glitch1 0.35s ease forwards; }
+  .logo-g2 { animation: glitch2 0.45s ease forwards; }
+  .logo-g3 { animation: glitch3 0.55s ease forwards; }
+  .logo-g4 { animation: glitch4 0.7s ease forwards; }
+
+  /* Mobile tweaks */
+  @media (max-width: 768px) {
+    #fw3 { bottom: -14px; }
+  }
   @keyframes glitch1 {
     0%   { transform: translateX(0); filter: drop-shadow(0 0 32px rgba(212,96,122,0.35)); }
     20%  { transform: translateX(-2px); filter: drop-shadow(-3px 0 0 rgba(255,0,80,0.3)) drop-shadow(3px 0 0 rgba(0,200,255,0.3)); }
@@ -262,26 +287,6 @@
     88%  { transform: translateX(1px); }
     100% { transform: translateX(0) scaleY(1); filter: drop-shadow(0 0 32px rgba(212,96,122,0.35)); }
   }
-
-  /* ── MELT — reality dissolving ── */
-  @keyframes melt {
-    0%   { opacity: 1; transform: scaleY(1) translateY(0); filter: blur(0px); }
-    20%  { transform: scaleY(1.04) translateY(-4px); filter: blur(1px); opacity: 0.9; }
-    40%  { transform: scaleY(0.96) translateY(8px) skewX(-2deg); filter: blur(3px); opacity: 0.7; }
-    60%  { transform: scaleY(1.06) translateY(-6px) skewX(3deg); filter: blur(6px); opacity: 0.5; }
-    80%  { transform: scaleY(0.9) translateY(20px); filter: blur(12px); opacity: 0.2; }
-    100% { transform: scaleY(0.8) translateY(40px); filter: blur(20px); opacity: 0; }
-  }
-
-  #main.melting {
-    animation: melt 1.8s ease forwards;
-    pointer-events: none;
-  }
-
-  .logo-g1 { animation: glitch1 0.35s ease forwards; }
-  .logo-g2 { animation: glitch2 0.45s ease forwards; }
-  .logo-g3 { animation: glitch3 0.55s ease forwards; }
-  .logo-g4 { animation: glitch4 0.7s ease forwards; }
 
   /* ── SOCIAL ICONS ── */
   .social-icons {
@@ -459,7 +464,8 @@
   <div id="logo-wrap">
     <img class="logo-static" src="Logo_No_Background_Vector.svg" alt="Lyras Winter">
     <div class="float-word" id="fw1">What is this creature inside,</div>
-    <div class="float-word" id="fw2">unexpected desire,</div>
+    <div class="float-word" id="fw2a">unexpected</div>
+    <div class="float-word" id="fw2b">desire,</div>
     <div class="float-word" id="fw3">seething at its maw?</div>
   </div>
   <div class="wordmark">Lyra's Winter</div>
@@ -550,7 +556,8 @@
   // ── SECRET REVEAL — Winter's Journal ──
   const logo = document.querySelector('.logo-static');
   const fw1 = document.getElementById('fw1');
-  const fw2 = document.getElementById('fw2');
+  const fw2a = document.getElementById('fw2a');
+  const fw2b = document.getElementById('fw2b');
   const fw3 = document.getElementById('fw3');
   let clickCount = 0;
   let resetTimer;
@@ -573,33 +580,35 @@
     }
     else if (clickCount === 3) {
       glitchLogo('logo-g3');
-      fw1.classList.add('visible');
     }
     else if (clickCount === 4) {
       glitchLogo('logo-g3');
-      fw2.classList.add('visible');
+      fw1.classList.add('visible');
     }
     else if (clickCount === 5) {
       glitchLogo('logo-g4');
-      fw3.classList.add('visible');
+      fw2a.classList.add('visible');
+      fw2b.classList.add('visible');
     }
     else if (clickCount === 6) {
-      // Reality melts
       glitchLogo('logo-g4');
+      fw3.classList.add('visible');
+    }
+    else if (clickCount === 7) {
+      glitchLogo('logo-g4');
+      main.classList.add('fading');
       setTimeout(() => {
-        main.classList.add('melting');
-        setTimeout(() => {
-          window.location.href = 'journal.html';
-        }, 2000);
-      }, 200);
-      return; // don't set reset timer
+        window.location.href = 'journal.html';
+      }, 1600);
+      return;
     }
 
     // Reset after 10 seconds of inactivity
     resetTimer = setTimeout(() => {
       clickCount = 0;
       fw1.classList.remove('visible');
-      fw2.classList.remove('visible');
+      fw2a.classList.remove('visible');
+      fw2b.classList.remove('visible');
       fw3.classList.remove('visible');
     }, 10000);
   });
