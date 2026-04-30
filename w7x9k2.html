@@ -205,8 +205,60 @@
     margin-bottom: 0;
   }
 
-  /* ── FOOTER ── */
-  .journal-footer {
+  /* ── READ MORE — collapsible long entries ── */
+  .entry-body.long {
+    position: relative;
+  }
+
+  .entry-preview {
+    font-family: var(--hand);
+    font-weight: 300;
+    font-size: clamp(17px, 2.5vw, 21px);
+    line-height: 1.9;
+    color: var(--entry-text);
+    letter-spacing: 0.02em;
+  }
+
+  .entry-full {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 1.2s ease;
+    font-family: var(--hand);
+    font-weight: 300;
+    font-size: clamp(17px, 2.5vw, 21px);
+    line-height: 1.9;
+    color: var(--entry-text);
+    letter-spacing: 0.02em;
+  }
+
+  .entry-full.open {
+    max-height: 9999px;
+  }
+
+  .entry-full p { margin-bottom: 1.4em; }
+  .entry-full p:last-child { margin-bottom: 0; }
+
+  .read-more-btn {
+    display: inline-block;
+    margin-top: 20px;
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--dim);
+    cursor: pointer;
+    border: none;
+    background: none;
+    padding: 0;
+    transition: color 0.2s;
+  }
+
+  .read-more-btn:hover { color: var(--pink); }
+
+  .read-more-btn::before {
+    content: '· · · ';
+    margin-right: 4px;
+  }
     position: relative; z-index: 1;
     padding: 40px;
     font-family: 'Space Mono', monospace;
@@ -256,14 +308,13 @@
 
   <!-- ═══════════════════════════════════════════════
        HOW TO ADD A NEW ENTRY:
-       Copy the block below, paste it above this comment,
-       update the date, title, type (poem or prose),
-       and replace the body text with your writing.
-       For poems use class="entry-body poem"
-       For prose use class="entry-body prose" and wrap paragraphs in <p> tags
-  ═══════════════════════════════════════════════ -->
 
-  <!-- ENTRY TEMPLATE (copy from here) ─────────────
+       SHORT ENTRY (poem, thought, short prose)
+       Copy this block and paste above this comment.
+       Use class="entry-body poem" for poems (preserves line breaks)
+       Use class="entry-body prose" for prose (wrap paragraphs in <p> tags)
+  ═══════════════════════════════════════════════
+
   <div class="entry">
     <div class="entry-meta">DD · MM · YYYY</div>
     <div class="entry-title">Title Here</div>
@@ -272,7 +323,30 @@ Your writing goes here.
 Line breaks are preserved for poems.
     </div>
   </div>
-  ─────────────────────────────── (to here) -->
+
+       ═══════════════════════════════════════════════
+       LONG ENTRY (short stories, essays)
+       The preview shows before "read more" is clicked.
+       Put your opening lines in entry-preview.
+       Put the rest in entry-full.
+  ═══════════════════════════════════════════════
+
+  <div class="entry">
+    <div class="entry-meta">DD · MM · YYYY</div>
+    <div class="entry-title">Title Here</div>
+    <div class="entry-body long">
+      <div class="entry-preview">
+        <p>Your opening paragraph or lines go here. This is what readers see before clicking read more.</p>
+      </div>
+      <div class="entry-full">
+        <p>The rest of your story continues here.</p>
+        <p>Add as many paragraphs as you need.</p>
+      </div>
+      <button class="read-more-btn" onclick="toggleEntry(this)">stay a little longer</button>
+    </div>
+  </div>
+
+  ═══════════════════════════════════════════════ -->
 
   <!-- ENTRY 1 -->
   <div class="entry">
@@ -352,6 +426,14 @@ to grow.</div>
 </div><!-- end journal-content -->
 
 <script>
+  // ── READ MORE TOGGLE ──
+  function toggleEntry(btn) {
+    const full = btn.previousElementSibling;
+    const isOpen = full.classList.contains('open');
+    full.classList.toggle('open');
+    btn.textContent = isOpen ? 'read more' : 'read less';
+  }
+
   // Session gate — blank page if ritual not completed
   if (!sessionStorage.getItem('journal_unlocked')) {
     document.getElementById('gate').style.display = 'block';
@@ -380,23 +462,26 @@ to grow.</div>
     setTimeout(() => fadeInEl(tl2, 2000), 2800);
     // Line 3 fades in
     setTimeout(() => fadeInEl(tl3, 2000), 5400);
-    // All lines fade out together
-    setTimeout(() => {{
-      fadeOutEl(tl1, 1400);
-      fadeOutEl(tl2, 1400);
-      fadeOutEl(tl3, 1400);
-    }}, 8200);
-    // Threshold overlay fades out, journal fades in
-    setTimeout(() => {{
-      threshold.style.transition = 'opacity 1.4s ease';
+    // All lines hold for a moment then fade out together — slow and gentle
+    setTimeout(() => {
+      fadeOutEl(tl1, 2000);
+      fadeOutEl(tl2, 2000);
+      fadeOutEl(tl3, 2000);
+    }, 8400);
+    // Wait for lines to fully disappear before anything else moves
+    setTimeout(() => {
+      threshold.style.transition = 'opacity 1.6s ease';
       threshold.style.opacity = '0';
       threshold.style.pointerEvents = 'none';
+    }, 10800);
+    // Journal fades in only after overlay is fully gone
+    setTimeout(() => {
       content.classList.add('visible');
-    }}, 9800);
+    }, 11600);
     // Remove threshold from DOM
-    setTimeout(() => {{
+    setTimeout(() => {
       threshold.style.display = 'none';
-    }}, 11400);
+    }, 13400);
   }
 </script>
 
