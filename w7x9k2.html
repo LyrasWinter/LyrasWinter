@@ -37,7 +37,6 @@
     font-family: var(--hand);
     overflow-x: hidden;
     min-height: 100vh;
-    animation: fadeIn 1.5s ease forwards;
   }
 
   @keyframes fadeIn {
@@ -51,6 +50,41 @@
     position: fixed; inset: 0;
     background: #080808;
     z-index: 999;
+  }
+
+  /* ── THRESHOLD INTERSTITIAL ── */
+  #threshold {
+    position: fixed; inset: 0; z-index: 200;
+    background: var(--black);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    padding: 40px;
+    pointer-events: none;
+  }
+
+  .threshold-line {
+    font-family: var(--hand);
+    font-style: italic;
+    font-weight: 300;
+    font-size: clamp(16px, 3vw, 22px);
+    letter-spacing: 0.06em;
+    color: var(--text);
+    text-align: center;
+    line-height: 1.7;
+    opacity: 0;
+  }
+
+  /* journal content hidden until threshold done */
+  #journal-content {
+    opacity: 0;
+    transition: opacity 1.4s ease;
+  }
+
+  #journal-content.visible {
+    opacity: 1;
   }
 
 
@@ -200,6 +234,16 @@
 <body>
 <div id="gate"></div>
 
+<!-- THRESHOLD — fades in before journal -->
+<div id="threshold">
+  <div class="threshold-line" id="tl1">When the thoughts become too much....</div>
+  <div class="threshold-line" id="tl2">When my feelings want to tear,<br>through the skin I wear....</div>
+  <div class="threshold-line" id="tl3">A place to free them into this world,<br>from this soul I bare....</div>
+</div>
+
+<!-- JOURNAL CONTENT — hidden until threshold completes -->
+<div id="journal-content">
+
 <nav>
   <a href="index.html" class="nav-logo">Lyra Winter</a>
   <a href="index.html" class="nav-back" onclick="sessionStorage.removeItem('journal_unlocked')">← return</a>
@@ -303,13 +347,56 @@ to grow.</div>
 
 </div>
 
-<div class="journal-footer">© 2026 Lyra Winter &nbsp;·&nbsp; Winter's Journal</div>
+  <div class="journal-footer">© 2026 Lyra Winter &nbsp;·&nbsp; Winter's Journal</div>
+
+</div><!-- end journal-content -->
 
 <script>
   // Session gate — blank page if ritual not completed
   if (!sessionStorage.getItem('journal_unlocked')) {
     document.getElementById('gate').style.display = 'block';
     document.body.style.overflow = 'hidden';
+  } else {
+    // ── THRESHOLD SEQUENCE ──
+    const tl1 = document.getElementById('tl1');
+    const tl2 = document.getElementById('tl2');
+    const tl3 = document.getElementById('tl3');
+    const threshold = document.getElementById('threshold');
+    const content = document.getElementById('journal-content');
+
+    function fadeInEl(el, duration) {
+      el.style.transition = `opacity ${{duration}}ms ease`;
+      el.style.opacity = '1';
+    }
+
+    function fadeOutEl(el, duration) {
+      el.style.transition = `opacity ${{duration}}ms ease`;
+      el.style.opacity = '0';
+    }
+
+    // Line 1 fades in
+    setTimeout(() => fadeInEl(tl1, 2000), 400);
+    // Line 2 fades in
+    setTimeout(() => fadeInEl(tl2, 2000), 2800);
+    // Line 3 fades in
+    setTimeout(() => fadeInEl(tl3, 2000), 5400);
+    // All lines fade out together
+    setTimeout(() => {{
+      fadeOutEl(tl1, 1400);
+      fadeOutEl(tl2, 1400);
+      fadeOutEl(tl3, 1400);
+    }}, 8200);
+    // Threshold overlay fades out, journal fades in
+    setTimeout(() => {{
+      threshold.style.transition = 'opacity 1.4s ease';
+      threshold.style.opacity = '0';
+      threshold.style.pointerEvents = 'none';
+      content.classList.add('visible');
+    }}, 9800);
+    // Remove threshold from DOM
+    setTimeout(() => {{
+      threshold.style.display = 'none';
+    }}, 11400);
   }
 </script>
 
