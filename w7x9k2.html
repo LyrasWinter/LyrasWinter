@@ -809,9 +809,15 @@ Line breaks are preserved for poems.
   // ── READ MORE TOGGLE ──
   function toggleEntry(btn) {
     const full = btn.previousElementSibling;
+    const entry = btn.closest('.entry');
     const isOpen = full.classList.contains('open');
     full.classList.toggle('open');
     btn.textContent = isOpen ? 'stay a little longer' : "that's enough for now";
+    if (isOpen) {
+      setTimeout(() => {
+        entry.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }
   }
 
   // Session gate — blank page if ritual not completed
