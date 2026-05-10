@@ -196,6 +196,20 @@
     white-space: pre-line;
   }
 
+  /* two column poem layout */
+  .entry-body.two-col {
+    font-size: clamp(13px, 1.8vw, 16px);
+    column-count: 2;
+    column-gap: 48px;
+    column-rule: 1px solid #150a0e;
+  }
+
+  @media (max-width: 600px) {
+    .entry-body.two-col {
+      column-count: 1;
+    }
+  }
+
   /* prose formatting */
   .entry-body.prose p {
     margin-bottom: 1.4em;
@@ -358,6 +372,75 @@ Line breaks are preserved for poems.
 
   ═══════════════════════════════════════════════ -->
 
+
+  <!-- POEM ENTRY — Untitled Poem, 21/01/2026 -->
+  <div class="entry">
+    <div class="entry-meta">21 · 01 · 2026</div>
+    <div class="entry-title">Untitled Poem</div>
+    <div class="entry-body poem two-col">A taste,
+one unexpected day,
+the year ending with just you.
+
+It leaves me wondering
+what else,
+if time allowed us,
+we might do?
+
+The way you make me feel now,
+when you linger here—
+a new kind provocation,
+a new kind of fear.
+
+Not louder,
+just different.
+I want to savour it—
+each breath.
+
+Each chapter a building component,
+new territories in friendship, still fresh.
+
+A taste that didn't satiate
+now leaves a hunger imbedded raw—
+What is this creature inside,
+unexpected desire, seething at its maw?
+
+I didn't know—
+months ago—
+I'd want to belong
+inside your passions too.
+
+Seated in this café window,
+desires suppressed by social cue.
+
+My world loosens its edges,
+a brief orbit through my atmosphere.
+
+You step outside for respite,
+I'm consumed—
+the eclipse of the year.
+
+Perched on the back of a bench,
+feet placed where most would sit,
+elbows on your knees,
+cigarette lit.
+
+I don't want to look—
+for that would be admitting to myself
+that when our gazes meet,
+control exists only as theory on a bookshelf.
+
+I look up.
+You do too—I tell myself this is nothing new.
+
+Sitting here. Eyes locked.
+
+Framed by this window.
+I see now,
+what I didn't before
+that feelings
+have begun
+to grow.</div>
+  </div>
 
   <!-- BLOG ENTRY 3 — Made with Love, 28/10/2025 -->
   <div class="entry">
@@ -809,9 +892,15 @@ Line breaks are preserved for poems.
   // ── READ MORE TOGGLE ──
   function toggleEntry(btn) {
     const full = btn.previousElementSibling;
+    const entry = btn.closest('.entry');
     const isOpen = full.classList.contains('open');
     full.classList.toggle('open');
     btn.textContent = isOpen ? 'stay a little longer' : "that's enough for now";
+    if (isOpen) {
+      setTimeout(() => {
+        entry.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+    }
   }
 
   // Session gate — blank page if ritual not completed
