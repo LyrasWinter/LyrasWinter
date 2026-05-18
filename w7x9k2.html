@@ -97,6 +97,14 @@
     display: flex;
     align-items: center;
     gap: 10px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 1s ease;
+  }
+
+  #audio-bar.visible {
+    opacity: 1;
+    pointer-events: all;
   }
 
   #audio-btn {
@@ -1053,11 +1061,12 @@ to grow.</div>
 
   // Start audio after threshold completes
   function startAudio() {
+    audioBar.classList.add('visible');
     audio.play().then(() => {
       audioPlaying = true;
       audioBtn.textContent = '⏸ pause';
     }).catch(() => {
-      // autoplay blocked — button already visible, user can click
+      // autoplay blocked — button now visible, user can click to start
     });
   }
 
