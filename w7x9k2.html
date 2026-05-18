@@ -17,8 +17,8 @@
   /* ── AUDIO PLAYER ── */
   #audio-bar {
     position: fixed;
-    bottom: 24px;
-    right: 24px;
+    bottom: 28px;
+    left: 28px;
     z-index: 300;
     display: flex;
     align-items: center;
@@ -34,16 +34,17 @@
   }
 
   #audio-btn {
-    background: none;
+    background: rgba(8,8,8,0.7);
     border: 1px solid var(--dim);
     color: var(--dim);
     font-family: 'Space Mono', monospace;
     font-size: 8px;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    padding: 8px 14px;
+    padding: 10px 16px;
     cursor: pointer;
     transition: all 0.2s;
+    backdrop-filter: blur(4px);
   }
 
   #audio-btn:hover {
@@ -353,7 +354,7 @@
 </audio>
 
 <div id="audio-bar">
-  <button id="audio-btn" onclick="toggleAudio()">⏸ pause</button>
+  <button type="button" id="audio-btn" onclick="toggleAudio(); return false;">⏸ pause</button>
 </div>
 
 
@@ -1092,15 +1093,18 @@ to grow.</div>
       audio.pause();
       audioBtn.textContent = '▶ play';
     }
+    return false;
   }
 
   // Start audio after threshold completes
   function startAudio() {
     audio.play().then(() => {
       audioPlaying = true;
-      audioBar.classList.add('visible');
+      setTimeout(() => { audioBar.classList.add('visible'); }, 500);
       audioBtn.textContent = '⏸ pause';
-    }).catch(() => {});
+    }).catch(() => {
+      setTimeout(() => { audioBar.classList.add('visible'); }, 500);
+    });
   }
 
   audio.addEventListener('ended', () => {
