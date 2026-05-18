@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Winter's Journal</title>
-<!-- When your handwriting font arrives, add it here:
+<!-- When your handwriting font arrives, replace --hand font-family with 'WintersHand':
 <style>
   @font-face {
     font-family: 'WintersHand';
@@ -13,45 +13,6 @@
     font-weight: normal;
     font-style: normal;
   }
-
-  /* ── AUDIO PLAYER ── */
-  #audio-bar {
-    position: fixed;
-    bottom: 28px;
-    left: 28px;
-    z-index: 300;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    opacity: 0;
-    transition: opacity 1s ease;
-    pointer-events: none;
-  }
-
-  #audio-bar.visible {
-    opacity: 1;
-    pointer-events: all;
-  }
-
-  #audio-btn {
-    background: rgba(8,8,8,0.7);
-    border: 1px solid var(--dim);
-    color: var(--dim);
-    font-family: 'Space Mono', monospace;
-    font-size: 8px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    padding: 10px 16px;
-    cursor: pointer;
-    transition: all 0.2s;
-    backdrop-filter: blur(4px);
-  }
-
-  #audio-btn:hover {
-    border-color: var(--pink);
-    color: var(--pink);
-  }
-
 </style>
 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -126,6 +87,36 @@
     opacity: 1;
   }
 
+
+  /* ── AUDIO PLAYER ── */
+  #audio-bar {
+    position: fixed;
+    bottom: 28px;
+    left: 28px;
+    z-index: 300;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  #audio-btn {
+    background: rgba(8,8,8,0.7);
+    border: 1px solid var(--dim);
+    color: var(--dim);
+    font-family: 'Space Mono', monospace;
+    font-size: 8px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 10px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    backdrop-filter: blur(4px);
+  }
+
+  #audio-btn:hover {
+    border-color: var(--pink);
+    color: var(--pink);
+  }
 
   /* subtle noise */
   body::before {
@@ -1005,12 +996,12 @@ to grow.</div>
     const content = document.getElementById('journal-content');
 
     function fadeInEl(el, duration) {
-      el.style.transition = `opacity ${{duration}}ms ease`;
+      el.style.transition = `opacity ${duration}ms ease`;
       el.style.opacity = '1';
     }
 
     function fadeOutEl(el, duration) {
-      el.style.transition = `opacity ${{duration}}ms ease`;
+      el.style.transition = `opacity ${duration}ms ease`;
       el.style.opacity = '0';
     }
 
@@ -1064,10 +1055,9 @@ to grow.</div>
   function startAudio() {
     audio.play().then(() => {
       audioPlaying = true;
-      setTimeout(() => { audioBar.classList.add('visible'); }, 500);
       audioBtn.textContent = '⏸ pause';
     }).catch(() => {
-      setTimeout(() => { audioBar.classList.add('visible'); }, 500);
+      // autoplay blocked — button already visible, user can click
     });
   }
 
