@@ -447,23 +447,6 @@
     text-align: center;
     text-transform: uppercase;
   }
-
-  /* ── LOADING SCREEN ── */
-  #loading-screen {
-    position: fixed; inset: 0; z-index: 9999;
-    background: #080808;
-    display: flex; align-items: center; justify-content: center;
-    transition: opacity 0.8s ease;
-  }
-  #loading-screen.fade-out { opacity: 0; pointer-events: none; }
-  #loading-logo {
-    width: min(180px, 40vw);
-    opacity: 0;
-    transition: opacity 0.6s ease;
-    filter: drop-shadow(0 0 24px rgba(232,160,180,0.5));
-  }
-  #loading-logo.visible { opacity: 1; }
-
   /* ── PAGE TRANSITION OVERLAY ── */
   #transition-overlay {
     position: fixed; inset: 0; z-index: 8888;
@@ -510,9 +493,6 @@
 </svg>
 </head>
 <body>
-<div id="loading-screen">
-  <img id="loading-logo" src="Logo_No_Background_Vector.svg" alt="Lyra Winter">
-</div>
 <div id="transition-overlay"></div>
 
 
@@ -738,19 +718,6 @@
       navigator.clipboard.writeText('lyraswinter@proton.me').then(showToast);
     }
   });
-
-  // ── LOADING SCREEN ──
-  const loadingScreen = document.getElementById('loading-screen');
-  const loadingLogo = document.getElementById('loading-logo');
-
-  if (!sessionStorage.getItem('loaded')) {
-    sessionStorage.setItem('loaded', 'true');
-    setTimeout(() => { loadingLogo.classList.add('visible'); }, 200);
-    setTimeout(() => { loadingScreen.classList.add('fade-out'); }, 1400);
-    setTimeout(() => { loadingScreen.style.display = 'none'; }, 2300);
-  } else {
-    loadingScreen.style.display = 'none';
-  }
 
   // ── PAGE TRANSITIONS ──
   const overlay = document.getElementById('transition-overlay');
