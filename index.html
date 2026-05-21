@@ -133,7 +133,29 @@
     to   { opacity:1; transform:translateY(0); }
   }
 
-  /* logo-static styles now inside #logo-wrap section above */
+
+  /* ── EYES SLOW BLINK ── */
+  @keyframes eyesBlink {
+    0%, 89%  { transform: scaleY(1); }
+    90%      { transform: scaleY(0.08); filter: drop-shadow(0 0 8px rgba(232,160,180,0.2)); }
+    93%      { transform: scaleY(1); }
+    96%      { transform: scaleY(0.08); }
+    100%     { transform: scaleY(1); }
+  }
+
+  .logo-static {
+    animation: eyesBlink 6s ease-in-out infinite;
+    transform-origin: center;
+  }
+
+  /* Pause blink during glitch so they don't fight */
+  .logo-static.logo-g1,
+  .logo-static.logo-g2,
+  .logo-static.logo-g3,
+  .logo-static.logo-g4 {
+    animation: none;
+  }
+
 
   @keyframes subtleGlitch {
     0%  { transform:translateX(0); }
@@ -520,7 +542,7 @@
     <div class="float-word" id="fw3">seething at its maw?</div>
   </div>
   <div class="wordmark">Lyra's Winter</div>
-  <div class="tagline">artist &nbsp;·&nbsp; model &nbsp;·&nbsp; creator<span class="cursor-blink"></span></div>
+  <div class="tagline"><span id="typed-tagline"></span><span class="cursor-blink"></span></div>
 
   <!-- SOCIAL ICONS -->
   <div class="social-icons">
