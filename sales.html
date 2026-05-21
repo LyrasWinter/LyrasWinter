@@ -201,6 +201,20 @@
   }
   .piece-enq a:hover { color: var(--pink); border-color: var(--pink); }
 
+
+  /* ── ENQUIRE BUTTON GLITCH ── */
+  .piece-enq a.glitching {
+    animation: enquireGlitch 0.35s steps(1) forwards;
+  }
+  @keyframes enquireGlitch {
+    0%   { text-shadow: none; letter-spacing: 0.25em; }
+    15%  { text-shadow: -2px 0 rgba(255,0,80,0.8), 2px 0 rgba(0,200,255,0.8); letter-spacing: 0.28em; }
+    30%  { text-shadow: 2px 0 rgba(255,0,80,0.5), -2px 0 rgba(0,200,255,0.5); letter-spacing: 0.22em; }
+    50%  { text-shadow: -3px 0 rgba(255,0,80,0.9), 3px 0 rgba(0,200,255,0.9); letter-spacing: 0.27em; }
+    70%  { text-shadow: 1px 0 rgba(255,0,80,0.4), -1px 0 rgba(0,200,255,0.4); letter-spacing: 0.24em; }
+    100% { text-shadow: none; letter-spacing: 0.25em; }
+  }
+
   /* COMMISSIONS */
   .commissions {
     position: relative; z-index: 1;
@@ -584,6 +598,19 @@
     });
   }, { threshold: 0.08 });
   fadeEls.forEach(el => observer.observe(el));
+
+
+  // ── ENQUIRE BUTTON GLITCH ──
+  document.querySelectorAll('.piece-enq a').forEach(btn => {
+    btn.addEventListener('mouseenter', function() {
+      this.classList.remove('glitching');
+      void this.offsetWidth;
+      this.classList.add('glitching');
+    });
+    btn.addEventListener('animationend', function() {
+      this.classList.remove('glitching');
+    });
+  });
 
 </script>
 </body>
