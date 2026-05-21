@@ -50,9 +50,9 @@
   .sales-banner {
     position: relative; z-index: 1;
     width: 100%;
-    margin-top: 60px;
+    margin-top: 0;
     overflow: hidden;
-    max-height: 45vh;
+    max-height: 55vh;
   }
   .sales-banner img {
     width: 100%; height: 100%;
@@ -61,11 +61,17 @@
     display: block;
     filter: brightness(0.82);
   }
+  .sales-banner::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(to bottom, rgba(8,8,8,0.5) 0%, transparent 35%, transparent 55%, #080808 100%);
+    pointer-events: none;
+  }
 
   /* PAGE INTRO */
   .page-intro {
     position: relative; z-index: 1;
-    padding: 48px 40px 60px;
+    padding: 32px 40px 60px;
     display: flex; align-items: baseline; justify-content: space-between;
     border-bottom: 1px solid #150a0e;
   }
@@ -264,9 +270,67 @@
     .commissions { grid-template-columns: 1fr; padding: 60px 20px; gap: 28px; }
     footer { padding: 40px 20px; flex-direction: column; gap: 10px; text-align: center; }
   }
+
+  /* ── LOADING SCREEN ── */
+  #loading-screen {
+    position: fixed; inset: 0; z-index: 9999;
+    background: #080808;
+    display: flex; align-items: center; justify-content: center;
+    transition: opacity 0.8s ease;
+  }
+  #loading-screen.fade-out { opacity: 0; pointer-events: none; }
+  #loading-logo {
+    width: min(180px, 40vw);
+    opacity: 0;
+    transition: opacity 0.6s ease;
+    filter: drop-shadow(0 0 24px rgba(232,160,180,0.5));
+  }
+  #loading-logo.visible { opacity: 1; }
+
+  /* ── PAGE TRANSITION OVERLAY ── */
+  #transition-overlay {
+    position: fixed; inset: 0; z-index: 8888;
+    background: #080808;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.4s ease;
+  }
+  #transition-overlay.active { opacity: 1; pointer-events: all; }
+
+  /* ── NAV GLITCH ── */
+  .nav-links a {
+    position: relative;
+  }
+  .nav-links a.glitching {
+    animation: navGlitch 0.3s steps(1) forwards;
+  }
+  @keyframes navGlitch {
+    0%   { text-shadow: none; }
+    15%  { text-shadow: -2px 0 rgba(255,0,80,0.7), 2px 0 rgba(0,200,255,0.7); letter-spacing: 0.25em; }
+    30%  { text-shadow: 2px 0 rgba(255,0,80,0.5), -2px 0 rgba(0,200,255,0.5); letter-spacing: 0.18em; }
+    50%  { text-shadow: -1px 0 rgba(255,0,80,0.8), 1px 0 rgba(0,200,255,0.8); }
+    70%  { text-shadow: 1px 0 rgba(255,0,80,0.3), -1px 0 rgba(0,200,255,0.3); }
+    100% { text-shadow: none; letter-spacing: 0.2em; }
+  }
+
+  /* ── SCROLL FADE-IN ── */
+  .fade-in-up {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-in-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
 </style>
 </head>
 <body>
+<div id="loading-screen">
+  <img id="loading-logo" src="Logo_No_Background_Vector.svg" alt="Lyra Winter">
+</div>
+<div id="transition-overlay"></div>
+
 
 <div id="lightbox">
   <span id="lightbox-close">Close</span>
@@ -299,7 +363,7 @@
 <div class="sales">
 
   <!-- 1. THE FOUR GENTLEMEN -->
-  <div class="piece">
+  <div class="piece fade-in-up">
     <div class="piece-text">
       <div class="piece-title">The Four Gentlemen</div>
       <div class="piece-meta">Sumi-e ink · Rice paper · Set of four · 32cm × 23.5cm each</div>
@@ -325,7 +389,7 @@
   </div>
 
   <!-- 2. SUMI -->
-  <div class="piece">
+  <div class="piece fade-in-up">
     <div class="piece-text">
       <div class="piece-title">Sumi</div>
       <div class="piece-meta">Linocut relief print · Chine-collé · Artist's Proof · 2023</div>
@@ -345,7 +409,7 @@
   </div>
 
   <!-- 3. FLOWER WALL -->
-  <div class="piece">
+  <div class="piece fade-in-up">
     <div class="piece-text">
       <div class="piece-title">Flower Wall</div>
       <div class="piece-meta">Silk &amp; synthetic florals · Dimensional wall piece · Mounted frame</div>
@@ -371,7 +435,7 @@
   </div>
 
   <!-- 4. MEMORIES OF DRAGON EGGS -->
-  <div class="piece">
+  <div class="piece fade-in-up">
     <div class="piece-text">
       <div class="piece-title">Memories of Dragon Eggs</div>
       <div class="piece-meta">Sculpted &amp; hand-painted · Personal renditions · Set of three</div>
@@ -397,7 +461,7 @@
   </div>
 
   <!-- ADD NEW PIECE BELOW — copy this block:
-  <div class="piece">
+  <div class="piece fade-in-up">
     <div class="piece-text">
       <div class="piece-title">Title</div>
       <div class="piece-meta">Medium · dimensions · year</div>
@@ -418,7 +482,7 @@
 </div>
 
 <!-- COMMISSIONS -->
-<div class="commissions">
+<div class="commissions fade-in-up">
   <div class="commissions-title">Commissions</div>
   <div class="commissions-body">
     <p>Like what you see? Almost everything here began as an idea that wouldn't leave me alone — and I'm always open to bringing someone else's idea to life in the same way.</p>
@@ -456,6 +520,71 @@
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') closeLightbox();
   });
+
+  // ── LOADING SCREEN ──
+  const loadingScreen = document.getElementById('loading-screen');
+  const loadingLogo = document.getElementById('loading-logo');
+
+  if (!sessionStorage.getItem('loaded')) {
+    sessionStorage.setItem('loaded', 'true');
+    setTimeout(() => { loadingLogo.classList.add('visible'); }, 200);
+    setTimeout(() => { loadingScreen.classList.add('fade-out'); }, 1400);
+    setTimeout(() => { loadingScreen.style.display = 'none'; }, 2300);
+  } else {
+    loadingScreen.style.display = 'none';
+  }
+
+  // ── PAGE TRANSITIONS ──
+  const overlay = document.getElementById('transition-overlay');
+
+  // Fade in on arrival
+  document.addEventListener('DOMContentLoaded', () => {
+    overlay.style.opacity = '1';
+    overlay.style.transition = 'none';
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        overlay.style.transition = 'opacity 0.5s ease';
+        overlay.style.opacity = '0';
+      });
+    });
+  });
+
+  // Fade out on leaving
+  document.querySelectorAll('a[href]').forEach(link => {
+    const href = link.getAttribute('href');
+    if (!href || href.startsWith('#') || href.startsWith('mailto') || href.startsWith('http')) return;
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      overlay.style.transition = 'opacity 0.4s ease';
+      overlay.style.opacity = '1';
+      setTimeout(() => { window.location.href = href; }, 420);
+    });
+  });
+
+  // ── NAV GLITCH ON HOVER ──
+  document.querySelectorAll('.nav-links a').forEach(link => {
+    link.addEventListener('mouseenter', function() {
+      this.classList.remove('glitching');
+      void this.offsetWidth;
+      this.classList.add('glitching');
+    });
+    link.addEventListener('animationend', function() {
+      this.classList.remove('glitching');
+    });
+  });
+
+  // ── SCROLL FADE-INS ──
+  const fadeEls = document.querySelectorAll('.fade-in-up');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  fadeEls.forEach(el => observer.observe(el));
+
 </script>
 </body>
 </html>
