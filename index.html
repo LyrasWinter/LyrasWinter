@@ -134,27 +134,7 @@
   }
 
 
-  /* ── EYES SLOW BLINK ── */
-  @keyframes eyesBlink {
-    0%, 89%  { transform: scaleY(1); }
-    90%      { transform: scaleY(0.08); filter: drop-shadow(0 0 8px rgba(232,160,180,0.2)); }
-    93%      { transform: scaleY(1); }
-    96%      { transform: scaleY(0.08); }
-    100%     { transform: scaleY(1); }
-  }
-
-  .logo-static {
-    animation: eyesBlink 6s ease-in-out infinite;
-    transform-origin: center;
-  }
-
-  /* Pause blink during glitch so they don't fight */
-  .logo-static.logo-g1,
-  .logo-static.logo-g2,
-  .logo-static.logo-g3,
-  .logo-static.logo-g4 {
-    animation: none;
-  }
+  /* Eyes blink removed — eyebrows blinked with it */
 
 
   @keyframes subtleGlitch {
@@ -505,6 +485,13 @@
     transform: translateY(0);
   }
 
+  /* ── FILM GRAIN ── */
+  #film-grain {
+    position: fixed; inset: 0; z-index: 9999;
+    pointer-events: none;
+    opacity: 0.025;
+  }
+
 </style>
 
 <svg style="position:absolute;width:0;height:0">
@@ -516,6 +503,7 @@
 </head>
 <body>
 <div id="transition-overlay"></div>
+<canvas id="film-grain"></canvas>
 
 
 <div id="toast">Email copied</div>
@@ -791,6 +779,51 @@
     });
   }, { threshold: 0.08 });
   fadeEls.forEach(el => observer.observe(el));
+
+  // ── TAGLINE TYPEWRITER ──
+  (function() {
+    const el = document.getElementById('typed-tagline');
+    if (!el) return;
+    const text = 'artist · model · streamer';
+    let i = 0;
+    // Delay until after intro fade (3.2s fade + 0.4s in = ~3.8s)
+    const delay = sessionStorage.getItem('visited') ? 300 : 3900;
+    setTimeout(function type() {
+      if (i <= text.length) {
+        el.textContent = text.slice(0, i);
+        i++;
+        setTimeout(type, 60);
+      }
+    }, delay);
+  })();
+
+  // ── FILM GRAIN ──
+  (function() {
+    const canvas = document.getElementById('film-grain');
+    const ctx = canvas.getContext('2d');
+    let w, h, animId;
+
+    function resize() {
+      w = canvas.width  = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+    }
+
+    function drawGrain() {
+      const img = ctx.createImageData(w, h);
+      const d = img.data;
+      for (let i = 0; i < d.length; i += 4) {
+        const v = (Math.random() * 255) | 0;
+        d[i] = d[i+1] = d[i+2] = v;
+        d[i+3] = 255;
+      }
+      ctx.putImageData(img, 0, 0);
+      animId = requestAnimationFrame(drawGrain);
+    }
+
+    window.addEventListener('resize', resize);
+    resize();
+    drawGrain();
+  })();
 
 </script>
 
