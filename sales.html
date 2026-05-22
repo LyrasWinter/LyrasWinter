@@ -411,7 +411,9 @@
     display: grid;
     grid-template-columns: repeat(5, 1fr);
     gap: 3px;
-    padding: 0 40px 48px;
+    padding: 0 0 48px;
+    max-width: 700px;
+    margin: 0 auto;
     position: relative; z-index: 91;
   }
   .hero-grid-item {
@@ -442,7 +444,7 @@
     color: rgba(200,160,176,0.75); margin-top: 4px;
   }
   @media (max-width: 768px) {
-    .hero-grid { grid-template-columns: repeat(3, 1fr); padding: 0 20px 36px; }
+    .hero-grid { grid-template-columns: repeat(4, 1fr); max-width: none; padding: 0; margin: 0 20px 36px; }
     .piece { scroll-margin-top: 60px; }
   }
 
