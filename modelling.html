@@ -85,9 +85,9 @@
   .page-title {
     font-family: 'Cormorant Garamond', serif; font-weight: 300;
     font-size: clamp(40px, 7vw, 72px); letter-spacing: 0.2em;
-    color: var(--pink); text-transform: uppercase; line-height: 1; margin-bottom: 14px;
+    color: var(--pink); text-transform: uppercase; line-height: 1; margin-bottom: 28px;
   }
-  .page-statement { font-size: 10px; letter-spacing: 0.2em; color: var(--dim); text-transform: uppercase; margin-bottom: 6px; }
+  .page-statement { font-size: 10px; letter-spacing: 0.2em; color: var(--dim); text-transform: uppercase; margin-bottom: 3px; }
   .page-contact a {
     font-size: 10px; letter-spacing: 0.15em; color: var(--pink);
     text-transform: uppercase; text-decoration: none;
@@ -166,6 +166,16 @@
   @media (max-width: 768px) {
     #lookbook-prev, #lookbook-next { padding: 20px 14px; font-size: 28px; }
   }
+
+  .cursor-blink {
+    display: inline-block;
+    width: 5px; height: 9px;
+    background: var(--dim);
+    margin-left: 4px;
+    vertical-align: middle;
+    animation: blink 1s step-end infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
 
   /* FOOTER */
   footer {
@@ -289,7 +299,7 @@
 <!-- PAGE HEADER -->
 <div class="page-header">
   <div class="page-title">Modelling</div>
-  <div class="page-statement">Available for creative direction & commission modelling</div>
+  <div class="page-statement"><span id="typed-statement"></span><span class="cursor-blink" id="statement-cursor"></span></div>
   <div class="page-contact"><a href="mailto:lyraswinter@proton.me">lyraswinter@proton.me</a></div>
 </div>
 
@@ -508,6 +518,25 @@
     window.addEventListener('resize', resize);
     resize();
     drawGrain();
+  })();
+  // ── TYPEWRITER: page-statement ──
+  (function() {
+    var el = document.getElementById('typed-statement');
+    var cursor = document.getElementById('statement-cursor');
+    if (!el) return;
+    var text = 'Available for creative direction & commission modelling';
+    var i = 0;
+    setTimeout(function type() {
+      if (i <= text.length) {
+        el.textContent = text.slice(0, i);
+        i++;
+        if (i <= text.length) {
+          setTimeout(type, 45);
+        } else {
+          if (cursor) cursor.style.display = 'none';
+        }
+      }
+    }, 600);
   })();
 
 </script>
