@@ -107,13 +107,18 @@
   }
   .piece:last-child { border-bottom: none; }
 
-  /* Text — left, spans both rows */
-  .piece-text {
+  /* Text — header top-left, bio-section bottom-left */
+  .piece-header {
     padding-right: 48px;
     padding-top: 4px;
     grid-column: 1;
-    grid-row: 1 / 3;
+    grid-row: 1;
     align-self: start;
+  }
+  .piece-bio-section {
+    grid-column: 1;
+    grid-row: 2;
+    padding-right: 48px;
   }
   .piece-title {
     font-family: 'Cormorant Garamond', serif; font-weight: 300;
@@ -209,22 +214,21 @@
     .page-intro { padding: 100px 20px 40px; flex-direction: column; gap: 16px; }
     .page-right { text-align: left; }
     .piece { grid-template-columns: 1fr; margin: 0 20px; padding: 48px 0; }
-    .piece-hero { grid-column: 1; order: 1; }
-    .piece-supporting { grid-column: 1; order: 2; margin-bottom: 24px; }
-    .piece-text { grid-column: 1; order: 3; padding-right: 0; }
-    .piece-landscape { grid-column: 1; order: 4; }
+    .piece-header { grid-column: 1; order: 1; padding-right: 0; margin-bottom: 16px; }
+    .piece-hero { grid-column: 1; order: 2; }
+    .piece-supporting { grid-column: 1; order: 3; margin-bottom: 24px; }
+    .piece-bio-section { grid-column: 1; order: 4; padding-right: 0; }
+    .piece-landscape { grid-column: 1; order: 5; }
     .piece-bio { max-height: 5.5em; overflow: hidden; transition: max-height 0.4s ease; }
     .piece-bio.expanded { max-height: 100em; }
-    .bio-toggle { display: inline-block; }
     footer { padding: 40px 20px; flex-direction: column; gap: 10px; text-align: center; }
   }
 
 
-  /* BIO TOGGLE — desktop hidden, mobile collapse */
+  /* BIO TOGGLE — base style; hidden on desktop via min-width query */
   .bio-toggle {
-    display: none;
     background: none; border: none; padding: 0;
-    margin-top: 10px;
+    margin-top: 12px;
     font-family: 'Space Mono', monospace;
     font-size: 8px; letter-spacing: 0.2em;
     text-transform: uppercase;
@@ -233,6 +237,7 @@
     transition: color 0.2s;
   }
   .bio-toggle:hover { color: var(--pink); }
+  @media (min-width: 769px) { .bio-toggle { display: none; } }
 
   /* ── LOADING SCREEN ── */
   #loading-screen {
@@ -336,9 +341,11 @@
 
   <!-- 1. LORETTA -->
   <div class="piece fade-in-up">
-    <div class="piece-text">
+    <div class="piece-header">
       <div class="piece-title">Loretta</div>
       <div class="piece-meta">Scale Maille · Aluminium &amp; Handmade Steel Rings · 2023</div>
+    </div>
+    <div class="piece-bio-section">
       <div class="piece-bio"><p>Loretta began, as many of my projects do, with me wandering through the woods and arriving at the completely reasonable conclusion that I needed to make an entire dress out of scale maille — despite having never made scale maille before. I still can't fully explain it.</p><p>The project followed me for years; something I'd obsess over in intense bursts before setting aside, only to inevitably be pulled back. When I finally committed to finishing it in 2023, I was surprised to find myself grateful for the slow timeline. My skills had evolved so much that the final piece became far more intricate and refined than anything I could have imagined at the start.</p><p>Loretta also sparked a full-blown love affair with chain and scale maille fashion — my aim being pieces designed equally for a nightclub, a renaissance fair, or whatever strange and wonderful space exists between the two.</p><p>The dress consists of approximately 1,500 aluminium scales and countless handmade steel rings — rings I made myself, and very quickly understood why most people simply buy them instead. The ring-making process alone nearly defeated me before the dress ever had the chance to.</p></div>
       <button class="bio-toggle" aria-expanded="false">read more</button>
     </div>
@@ -357,9 +364,11 @@
 
   <!-- 2. BRIDAL BOUQUETS -->
   <div class="piece fade-in-up">
-    <div class="piece-text">
+    <div class="piece-header">
       <div class="piece-title">Bridal Bouquets</div>
       <div class="piece-meta">Papier-mâché clay · Pigment &amp; varnish · Commission · 2024</div>
+    </div>
+    <div class="piece-bio-section">
       <div class="piece-bio"><p>When my best friend told me she was getting married — followed immediately by the revelation that it was happening within three months because she had somehow fallen pregnant almost instantly after they started trying — I'm fairly certain I was more excited than she was.</p><p>The wedding was intentionally modest; practical priorities had shifted quickly, and she was keeping costs low wherever possible. When I asked about flowers, she casually mentioned she'd skip them altogether. An unnecessary expense, she said.</p><p>Absolutely not.</p><p>There was no universe in which my best friend walked into her wedding without flowers. Not on my watch. What followed was equal parts labour of love and self-inflicted torment: 72 handmade papier-mâché clay flowers, each painted with pigment and sealed in varnish — fully weatherproof, because details matter even when no one expects them to. Small iridescent butterflies are nestled amongst the blooms, because sometimes the finishing touch is just a tiny creature minding its own business in a rose.</p><p>The arrangements doubled as table centrepieces, turning the entire space into something deeply personal and entirely handmade, giving the guests a chance to see them up close. By the end I was spiritually broken, physically defeated, and still completely convinced it was worth every second.</p><p>During the ceremony, I held it together really well….</p></div>
       <button class="bio-toggle" aria-expanded="false">read more</button>
     </div>
@@ -384,9 +393,11 @@
 
   <!-- 3. EFFE DRAGON -->
   <div class="piece fade-in-up">
-    <div class="piece-text">
+    <div class="piece-header">
       <div class="piece-title">Effe Dragon</div>
       <div class="piece-meta">Air-dry clay · Acrylic &amp; satin varnish · Commission · 2024</div>
+    </div>
+    <div class="piece-bio-section">
       <div class="piece-bio"><p>Some places quietly become part of your life before you realise it's happened. This local café became exactly that for me. Over the course of two years, they tolerated — and occasionally encouraged — my constant presence while I sat writing, reading, planning creative projects, and trying to convince myself I had everything figured out.</p><p>They also became one of the rare places safe enough to completely fall apart in when life demanded it. Which it did, periodically. They were very gracious about it.</p><p>At some point, the café mentioned wanting a small physical mascot based on their logo. My brain, as it tends to do, translated this into: I absolutely have to make this real.</p><p>The result was this little fat fuck — sculpted from air-dry clay, hand painted with acrylics, sealed in satin varnish, and spiritually powered by what I can only assume was pure caffeine. The glossy finish gives him the appearance of being cast from chocolate, which feels entirely fitting for a mascot born out of long hours, comfort, creativity, and an alarming quantity of coffee.</p><p>The tiny cup is moveable, placing it keeping the magic alive. They will definitely lose it. I will make another.</p></div>
       <button class="bio-toggle" aria-expanded="false">read more</button>
     </div>
@@ -405,9 +416,11 @@
 
   <!-- 4. THE NEST -->
   <div class="piece fade-in-up">
-    <div class="piece-text">
+    <div class="piece-header">
       <div class="piece-title">The Nest</div>
       <div class="piece-meta">Sculpted &amp; hand-painted · Commission · 2024</div>
+    </div>
+    <div class="piece-bio-section">
       <div class="piece-bio"><p>She isn't my mother by blood, but she may as well be — and for someone who has loved dragons her entire life, it felt only right that Mother's Day come with a nest of her own.</p><p>Three eggs, one for each of her children. Each one distinct, because they are.</p><p>The eldest: purple and gold — elegant, regal, quietly caring in the way only an oldest child can be. The middle: brown and gold — muted, minimalistic, straight to the point, but gentle all the way through. The youngest: silver and black — sharp as his wit, bold as his sense of style, very much a statement.</p><p>The process behind them is something I'll keep to myself. Some things are better left a little mysterious, and these deserved to feel like they'd always existed somewhere, just waiting to be found.</p></div>
       <button class="bio-toggle" aria-expanded="false">read more</button>
     </div>
@@ -430,9 +443,11 @@
 
   <!-- 5. BOOKMARKS -->
   <div class="piece fade-in-up">
-    <div class="piece-text">
+    <div class="piece-header">
       <div class="piece-title">Bookmarks</div>
       <div class="piece-meta">Swarovski crystal · Ribbon · Mixed medium beading</div>
+    </div>
+    <div class="piece-bio-section">
       <div class="piece-bio"><p>These bookmarks are, objectively speaking, completely unnecessary. A scrap of paper does the same job. A dog-eared page does the same job. And yet — Swarovski crystal, luxurious ribbon, and mixed medium beading, because my books deserve it and frankly so do yours.</p><p>There is no practical justification for them. They are purely and unapologetically beautiful.</p><p>These particular pieces aren't available for purchase, but they do exist as proof of concept for what happens when I'm left unsupervised near a bead collection.</p></div>
       <button class="bio-toggle" aria-expanded="false">read more</button>
     </div>
@@ -448,9 +463,11 @@
 
   <!-- ADD NEW PIECE BELOW — copy this block:
   <div class="piece fade-in-up">
-    <div class="piece-text">
+    <div class="piece-header">
       <div class="piece-title">Title</div>
       <div class="piece-meta">Medium · notes · year</div>
+    </div>
+    <div class="piece-bio-section">
       <div class="piece-bio"><p>Paragraph one.</p><p>Paragraph two.</p></div>
       <button class="bio-toggle" aria-expanded="false">read more</button>
     </div>
@@ -474,33 +491,43 @@
 <script>
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightbox-img');
+  let lightboxOpen = false;
 
   function openLightbox(el) {
     const src = el.querySelector('img').src;
     lightboxImg.src = src;
     lightbox.classList.add('open');
     document.body.style.overflow = 'hidden';
+    lightboxOpen = true;
+    history.pushState({ lightbox: true }, '');
   }
-
-  document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
-  lightbox.addEventListener('click', function(e) {
-    if (e.target === lightbox) closeLightbox();
-  });
 
   function closeLightbox() {
     lightbox.classList.remove('open');
     document.body.style.overflow = '';
+    lightboxOpen = false;
   }
 
+  document.getElementById('lightbox-close').addEventListener('click', () => {
+    if (lightboxOpen) history.back(); else closeLightbox();
+  });
+  lightbox.addEventListener('click', function(e) {
+    if (e.target === lightbox) { if (lightboxOpen) history.back(); else closeLightbox(); }
+  });
   document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'Escape' && lightbox.classList.contains('open')) {
+      if (lightboxOpen) history.back(); else closeLightbox();
+    }
+  });
+  window.addEventListener('popstate', function() {
+    if (lightbox.classList.contains('open')) closeLightbox();
   });
 
 
   // ── BIO TOGGLE ──
   document.querySelectorAll('.bio-toggle').forEach(btn => {
     btn.addEventListener('click', function() {
-      const bio = this.previousElementSibling;
+      const bio = this.closest('.piece-bio-section').querySelector('.piece-bio');
       const expanded = bio.classList.toggle('expanded');
       this.textContent = expanded ? 'read less' : 'read more';
       this.setAttribute('aria-expanded', expanded);
