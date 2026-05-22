@@ -37,6 +37,21 @@
     font-family: var(--hand);
     overflow-x: hidden;
     min-height: 100vh;
+    cursor: crosshair;
+  }
+
+  #transition-overlay {
+    position: fixed; inset: 0; z-index: 8888;
+    background: #080808;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.4s ease;
+  }
+  #overlay-logo {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(180px, 40vw); opacity: 0;
+    pointer-events: none;
+    filter: drop-shadow(0 0 20px rgba(232,160,180,0.35));
   }
 
   @keyframes fadeIn {
@@ -346,6 +361,7 @@
 </style>
 </head>
 <body>
+<div id="transition-overlay"><img id="overlay-logo" src="Logo_No_Background_Vector.svg" alt=""></div>
 <div id="gate"></div>
 
 <audio id="journal-audio" preload="auto">
@@ -1073,6 +1089,40 @@ to grow.</div>
   audio.addEventListener('ended', () => {
     audioBtn.textContent = '▶ play';
   });
+
+  // ── PAGE TRANSITIONS ──
+  (function() {
+    const overlay = document.getElementById('transition-overlay');
+    const ovLogo = document.getElementById('overlay-logo');
+
+    const fromTransition = sessionStorage.getItem('transitioning');
+    sessionStorage.removeItem('transitioning');
+    overlay.style.opacity = '1';
+    overlay.style.transition = 'none';
+    if (fromTransition && ovLogo) { ovLogo.style.opacity = '1'; ovLogo.style.transition = 'none'; }
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setTimeout(() => {
+          overlay.style.transition = 'opacity 0.5s ease';
+          overlay.style.opacity = '0';
+          if (ovLogo) { ovLogo.style.transition = 'opacity 0.4s ease'; ovLogo.style.opacity = '0'; }
+        }, fromTransition ? 280 : 0);
+      });
+    });
+
+    document.querySelectorAll('a[href]').forEach(link => {
+      const href = link.getAttribute('href');
+      if (!href || href.startsWith('#') || href.startsWith('mailto') || href.startsWith('http')) return;
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        sessionStorage.setItem('transitioning', 'true');
+        overlay.style.transition = 'opacity 0.3s ease';
+        overlay.style.opacity = '1';
+        setTimeout(() => { if (ovLogo) ovLogo.style.opacity = '1'; }, 220);
+        setTimeout(() => { window.location.href = href; }, 620);
+      });
+    });
+  })();
 
 </script>
 
