@@ -755,12 +755,17 @@
   }
 
   emailBtn.addEventListener('click', function(e) {
-    e.preventDefault();
     const isMobile = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
     if (isMobile) {
-      window.location.href = 'mailto:lyraswinter@proton.me';
+      return; // let href="mailto:..." open the email app natively
+    }
+    e.preventDefault();
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText('lyraswinter@proton.me').then(showToast).catch(function() {
+        window.location.href = 'mailto:lyraswinter@proton.me';
+      });
     } else {
-      navigator.clipboard.writeText('lyraswinter@proton.me').then(showToast);
+      window.location.href = 'mailto:lyraswinter@proton.me';
     }
   });
 
