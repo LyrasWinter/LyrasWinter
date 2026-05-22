@@ -342,35 +342,7 @@
     filter: drop-shadow(0 0 20px rgba(232,160,180,0.35));
   }
 
-  /* ── CUSTOM CURSOR ── */
-  *, *::before, *::after { cursor: none !important; }
-  #custom-cursor {
-    position: fixed; pointer-events: none; z-index: 2147483647;
-    left: -40px; top: -40px;
-    width: 0; height: 0;
-    overflow: visible;
-  }
-  #custom-cursor .cur-h,
-  #custom-cursor .cur-v {
-    position: absolute;
-    background: #e8a0b4;
-    transition: background 0.15s ease, box-shadow 0.15s ease;
-  }
-  #custom-cursor .cur-h {
-    width: 30px; height: 2px;
-    top: -1px; left: -15px;
-  }
-  #custom-cursor .cur-v {
-    width: 2px; height: 30px;
-    top: -15px; left: -1px;
-  }
-  #custom-cursor.hover .cur-h,
-  #custom-cursor.hover .cur-v {
-    background: #d4607a;
-    box-shadow: 0 0 8px rgba(212,96,122,0.65), 0 0 18px rgba(212,96,122,0.25);
-  }
-  @media (hover: none), (pointer: coarse) { #custom-cursor { display: none; } }
-  /* ── NAV GLITCH ── */
+    /* ── NAV GLITCH ── */
   .nav-links a {
     position: relative;
   }
@@ -409,7 +381,6 @@
   </style>
 </head>
 <body>
-<div id="custom-cursor"></div>
 <canvas id="film-grain"></canvas>
 <div id="loading-screen">
   <img id="loading-logo" src="Logo_No_Background_Vector.svg" alt="Lyra Winter">
@@ -656,13 +627,13 @@
   const loadingScreen = document.getElementById('loading-screen');
   const loadingLogo = document.getElementById('loading-logo');
 
-  if (!sessionStorage.getItem('loaded')) {
+  if (sessionStorage.getItem('transitioning') || sessionStorage.getItem('loaded')) {
+    loadingScreen.style.display = 'none';
+  } else {
     sessionStorage.setItem('loaded', 'true');
     setTimeout(() => { loadingLogo.classList.add('visible'); }, 200);
     setTimeout(() => { loadingScreen.classList.add('fade-out'); }, 1400);
     setTimeout(() => { loadingScreen.style.display = 'none'; }, 2300);
-  } else {
-    loadingScreen.style.display = 'none';
   }
 
   // ── PAGE TRANSITIONS ──
@@ -748,31 +719,7 @@
     resize();
     drawGrain();
   
-  // ── CUSTOM CURSOR ──
-  (function() {
-    var cur = document.getElementById('custom-cursor');
-    if (!cur) return;
-    if (window.matchMedia('(hover: none)').matches || window.matchMedia('(pointer: coarse)').matches || 'ontouchstart' in window) {
-      cur.style.display = 'none';
-      return;
-    }
-    var h = document.createElement('div'); h.className = 'cur-h';
-    var v = document.createElement('div'); v.className = 'cur-v';
-    cur.appendChild(h); cur.appendChild(v);
-    document.addEventListener('mousemove', function(e) {
-      cur.style.left = e.clientX + 'px';
-      cur.style.top = e.clientY + 'px';
-    });
-    document.addEventListener('mouseleave', function() { cur.style.opacity = '0'; });
-    document.addEventListener('mouseenter', function() { cur.style.opacity = '1'; });
-    document.addEventListener('mouseover', function(e) {
-      if (e.target.closest('a, button, [role="button"], input, select, textarea, label, summary, [tabindex]:not([tabindex="-1"])')) {
-        cur.classList.add('hover');
-      } else {
-        cur.classList.remove('hover');
-      }
-    });
-  })();
+  
 
 })();
 
