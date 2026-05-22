@@ -175,6 +175,24 @@
     animation: blink 1s step-end infinite;
   }
 
+  .look-closer {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic; font-weight: 300;
+    font-size: clamp(11px, 1.6vw, 15px);
+    letter-spacing: 0.5em; text-transform: lowercase;
+    color: #e8a0b4; opacity: 0.03;
+    pointer-events: none; white-space: nowrap; z-index: 0;
+  }
+
+  .creator-line {
+    font-size: 10px; letter-spacing: 0.25em;
+    color: var(--dim); text-transform: uppercase;
+    margin-top: 5px; opacity: 0;
+    transition: opacity 1.2s ease;
+  }
+
   @keyframes blink { 50% { opacity:0; } }
 
   /* ── LOGO WRAP — positioned container for floating words ── */
@@ -458,6 +476,14 @@
   }
   #transition-overlay.active { opacity: 1; pointer-events: all; }
 
+  #overlay-logo {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(180px, 40vw); opacity: 0;
+    pointer-events: none;
+    filter: drop-shadow(0 0 20px rgba(232,160,180,0.35));
+  }
+
   /* ── NAV GLITCH ── */
   .nav-links a {
     position: relative;
@@ -502,7 +528,7 @@
 </svg>
 </head>
 <body>
-<div id="transition-overlay"></div>
+<div id="transition-overlay"><img id="overlay-logo" src="Logo_No_Background_Vector.svg" alt=""></div>
 <canvas id="film-grain"></canvas>
 
 
@@ -523,6 +549,7 @@
 <!-- MAIN PAGE -->
 <div id="main">
   <div id="logo-wrap">
+    <div class="look-closer">look closer</div>
     <img class="logo-static" src="Logo_No_Background_Vector.svg" alt="Lyras Winter">
     <div class="float-word" id="fw1">What is this creature inside,</div>
     <div class="float-word" id="fw2a">unexpected</div>
@@ -531,6 +558,7 @@
   </div>
   <div class="wordmark">Lyra's Winter</div>
   <div class="tagline"><span id="typed-tagline"></span><span class="cursor-blink"></span></div>
+  <div class="creator-line"><span id="creator-word">creator</span></div>
 
   <!-- SOCIAL ICONS -->
   <div class="social-icons">
@@ -738,28 +766,37 @@
 
   // ── PAGE TRANSITIONS ──
   const overlay = document.getElementById('transition-overlay');
+  const ovLogo = document.getElementById('overlay-logo');
 
-  // Fade in on arrival
+  // Fade in on arrival — hold with eyes logo if arriving via link
   document.addEventListener('DOMContentLoaded', () => {
+    const fromTransition = sessionStorage.getItem('transitioning');
+    sessionStorage.removeItem('transitioning');
     overlay.style.opacity = '1';
     overlay.style.transition = 'none';
+    if (fromTransition && ovLogo) { ovLogo.style.opacity = '1'; ovLogo.style.transition = 'none'; }
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
-        overlay.style.transition = 'opacity 0.5s ease';
-        overlay.style.opacity = '0';
+        setTimeout(() => {
+          overlay.style.transition = 'opacity 0.5s ease';
+          overlay.style.opacity = '0';
+          if (ovLogo) { ovLogo.style.transition = 'opacity 0.4s ease'; ovLogo.style.opacity = '0'; }
+        }, fromTransition ? 280 : 0);
       });
     });
   });
 
-  // Fade out on leaving
+  // Fade out on leaving — show eyes logo before navigate
   document.querySelectorAll('a[href]').forEach(link => {
     const href = link.getAttribute('href');
     if (!href || href.startsWith('#') || href.startsWith('mailto') || href.startsWith('http')) return;
     link.addEventListener('click', function(e) {
       e.preventDefault();
-      overlay.style.transition = 'opacity 0.4s ease';
+      sessionStorage.setItem('transitioning', 'true');
+      overlay.style.transition = 'opacity 0.3s ease';
       overlay.style.opacity = '1';
-      setTimeout(() => { window.location.href = href; }, 420);
+      setTimeout(() => { if (ovLogo) ovLogo.style.opacity = '1'; }, 220);
+      setTimeout(() => { window.location.href = href; }, 620);
     });
   });
 
@@ -793,16 +830,44 @@
     if (!el) return;
     const text = 'artist · model · streamer';
     let i = 0;
-    // Delay until after intro fade (3.2s fade + 0.4s in = ~3.8s)
     const delay = sessionStorage.getItem('visited') ? 300 : 3900;
     setTimeout(function type() {
       if (i <= text.length) {
         el.textContent = text.slice(0, i);
         i++;
-        setTimeout(type, 60);
+        if (i <= text.length) {
+          setTimeout(type, 60);
+        } else {
+          sessionStorage.setItem('visited', 'true');
+          const cl = document.querySelector('.creator-line');
+          if (cl) setTimeout(() => { cl.style.opacity = '1'; scheduleCreatorFlicker(); }, 900);
+        }
       }
     }, delay);
   })();
+
+  // ── CREATOR → WRITER FLICKER ──
+  function scheduleCreatorFlicker() {
+    setTimeout(doCreatorFlicker, 15000 + Math.random() * 10000);
+  }
+  function doCreatorFlicker() {
+    const el = document.getElementById('creator-word');
+    if (!el) return;
+    const seq = [
+      [70,  'writer',  '-2px 0 rgba(255,0,80,0.85), 2px 0 rgba(0,200,255,0.85)'],
+      [55,  'creator', '2px 0 rgba(255,0,80,0.5), -2px 0 rgba(0,200,255,0.5)'],
+      [110, 'writer',  '-1px 0 rgba(255,0,80,0.9), 1px 0 rgba(0,200,255,0.9)'],
+      [45,  'creator', 'none'],
+      [90,  'writer',  '1px 0 rgba(255,0,80,0.7), -1px 0 rgba(0,200,255,0.7)'],
+      [0,   'creator', 'none'],
+    ];
+    let t = 0;
+    seq.forEach(([dur, text, shadow]) => {
+      setTimeout(() => { el.textContent = text; el.style.textShadow = shadow; }, t);
+      t += dur;
+    });
+    setTimeout(scheduleCreatorFlicker, t + 50);
+  }
 
   // ── FILM GRAIN ──
   (function() {
