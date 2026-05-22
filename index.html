@@ -775,7 +775,9 @@
 
   emailBtn.addEventListener('click', function(e) {
     const isMobile = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
-    if (!isMobile) {
+    if (isMobile) {
+      navigator.clipboard.writeText('lyraswinter@proton.me').then(showToast);
+    } else {
       e.preventDefault();
       navigator.clipboard.writeText('lyraswinter@proton.me').then(showToast);
     }
@@ -871,11 +873,11 @@
     const el = document.getElementById('streamer-word');
     if (!el) return;
     const seq = [
-      [70,  'writer',   '-2px 0 rgba(255,0,80,0.85), 2px 0 rgba(0,200,255,0.85)'],
+      [77,  'writer',   '-2px 0 rgba(255,0,80,0.85), 2px 0 rgba(0,200,255,0.85)'],
       [55,  'streamer', '2px 0 rgba(255,0,80,0.5), -2px 0 rgba(0,200,255,0.5)'],
-      [110, 'writer',   '-1px 0 rgba(255,0,80,0.9), 1px 0 rgba(0,200,255,0.9)'],
+      [121, 'writer',   '-1px 0 rgba(255,0,80,0.9), 1px 0 rgba(0,200,255,0.9)'],
       [45,  'streamer', 'none'],
-      [90,  'writer',   '1px 0 rgba(255,0,80,0.7), -1px 0 rgba(0,200,255,0.7)'],
+      [99,  'writer',   '1px 0 rgba(255,0,80,0.7), -1px 0 rgba(0,200,255,0.7)'],
       [0,   'streamer', 'none'],
     ];
     let t = 0;
@@ -905,7 +907,7 @@
       el.style.transform = 'translate(calc(-50% + ' + pos.x + 'px), calc(-50% + ' + pos.y + 'px))';
       void el.offsetWidth;
       el.style.transition = 'opacity 1.5s ease';
-      el.style.opacity = '0.03';
+      el.style.opacity = '0.033';
       setTimeout(function() {
         el.style.opacity = '0';
         idx = (idx + 1) % positions.length;
