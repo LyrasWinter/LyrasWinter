@@ -755,11 +755,11 @@
   }
 
   emailBtn.addEventListener('click', function(e) {
+    e.preventDefault();
     const isMobile = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
     if (isMobile) {
-      navigator.clipboard.writeText('lyraswinter@proton.me').then(showToast);
+      window.location.href = 'mailto:lyraswinter@proton.me';
     } else {
-      e.preventDefault();
       navigator.clipboard.writeText('lyraswinter@proton.me').then(showToast);
     }
   });
