@@ -14,7 +14,7 @@
   }
   html, body {
     background: var(--black); color: var(--text);
-    font-family: 'Space Mono', monospace; overflow-x: hidden;
+    font-family: 'Space Mono', monospace; overflow-x: hidden; cursor: crosshair;
   }
   body::after {
     content: ''; position: fixed; inset: 0; z-index: 0;
@@ -334,6 +334,14 @@
   }
   #transition-overlay.active { opacity: 1; pointer-events: all; }
 
+  #overlay-logo {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: min(180px, 40vw); opacity: 0;
+    pointer-events: none;
+    filter: drop-shadow(0 0 20px rgba(232,160,180,0.35));
+  }
+
   /* ── NAV GLITCH ── */
   .nav-links a {
     position: relative;
@@ -377,7 +385,7 @@
 <div id="loading-screen">
   <img id="loading-logo" src="Logo_No_Background_Vector.svg" alt="Lyra Winter">
 </div>
-<div id="transition-overlay"></div>
+<div id="transition-overlay"><img id="overlay-logo" src="Logo_No_Background_Vector.svg" alt=""></div>
 
 
 <div id="lightbox">
@@ -630,28 +638,37 @@
 
   // ── PAGE TRANSITIONS ──
   const overlay = document.getElementById('transition-overlay');
+  const ovLogo = document.getElementById('overlay-logo');
 
-  // Fade in on arrival
+  // Fade in on arrival — hold with eyes logo if arriving via link
   document.addEventListener('DOMContentLoaded', () => {
+    const fromTransition = sessionStorage.getItem('transitioning');
+    sessionStorage.removeItem('transitioning');
     overlay.style.opacity = '1';
     overlay.style.transition = 'none';
+    if (fromTransition && ovLogo) { ovLogo.style.opacity = '1'; ovLogo.style.transition = 'none'; }
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {
-        overlay.style.transition = 'opacity 0.5s ease';
-        overlay.style.opacity = '0';
+        setTimeout(() => {
+          overlay.style.transition = 'opacity 0.5s ease';
+          overlay.style.opacity = '0';
+          if (ovLogo) { ovLogo.style.transition = 'opacity 0.4s ease'; ovLogo.style.opacity = '0'; }
+        }, fromTransition ? 280 : 0);
       });
     });
   });
 
-  // Fade out on leaving
+  // Fade out on leaving — show eyes logo before navigate
   document.querySelectorAll('a[href]').forEach(link => {
     const href = link.getAttribute('href');
     if (!href || href.startsWith('#') || href.startsWith('mailto') || href.startsWith('http')) return;
     link.addEventListener('click', function(e) {
       e.preventDefault();
-      overlay.style.transition = 'opacity 0.4s ease';
+      sessionStorage.setItem('transitioning', 'true');
+      overlay.style.transition = 'opacity 0.3s ease';
       overlay.style.opacity = '1';
-      setTimeout(() => { window.location.href = href; }, 420);
+      setTimeout(() => { if (ovLogo) ovLogo.style.opacity = '1'; }, 220);
+      setTimeout(() => { window.location.href = href; }, 620);
     });
   });
 
