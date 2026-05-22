@@ -251,52 +251,17 @@
   /* LIGHTBOX */
   #lightbox {
     position: fixed; inset: 0; z-index: 500;
-    background: #000; display: none;
-    align-items: center; justify-content: center;
+    background: rgba(8,8,8,0.97); display: none;
+    align-items: center; justify-content: center; cursor: pointer;
   }
   #lightbox.open { display: flex; }
-  #lightbox-img {
-    max-width: 90vw; max-height: 82vh;
-    width: auto; height: auto; object-fit: contain;
-    user-select: none; transition: opacity 0.22s ease;
-  }
-  #lightbox-img.fade { opacity: 0; }
+  #lightbox img { max-width: 92vw; max-height: 92vh; object-fit: contain; cursor: default; }
   #lightbox-close {
-    position: absolute; top: 20px; right: 28px;
-    background: none; border: none; padding: 8px;
-    font-size: 20px; color: rgba(255,255,255,0.3);
-    cursor: pointer; transition: color 0.2s; z-index: 2; line-height: 1;
+    position: absolute; top: 24px; right: 32px;
+    font-size: 10px; letter-spacing: 0.2em; color: var(--dim);
+    text-transform: uppercase; cursor: pointer; transition: color 0.2s;
   }
   #lightbox-close:hover { color: var(--pink); }
-  #lightbox-prev, #lightbox-next {
-    position: absolute; top: 50%; transform: translateY(-50%);
-    background: none; border: none;
-    font-size: 36px; color: rgba(255,255,255,0.6);
-    cursor: pointer; transition: color 0.2s; z-index: 2;
-    padding: 24px 20px; line-height: 1; font-family: Georgia, serif;
-  }
-  #lightbox-prev { left: 0; }
-  #lightbox-next { right: 0; }
-  #lightbox-prev:hover, #lightbox-next:hover { color: var(--pink); }
-  #lightbox-counter {
-    position: absolute; bottom: 52px; left: 50%; transform: translateX(-50%);
-    font-size: 9px; letter-spacing: 0.3em; color: rgba(255,255,255,0.5);
-    text-transform: uppercase; white-space: nowrap; pointer-events: none;
-  }
-  #lightbox-more {
-    position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
-    background: none; border: 1px solid rgba(232,160,180,0.4); padding: 8px 24px;
-    font-family: 'Space Mono', monospace; font-size: 8px; letter-spacing: 0.25em;
-    color: var(--pink); text-transform: uppercase; cursor: pointer;
-    transition: background 0.2s, border-color 0.2s; white-space: nowrap;
-  }
-  #lightbox-more:hover { background: rgba(232,160,180,0.08); border-color: var(--pink); }
-  .piece { scroll-margin-top: 80px; }
-  @media (max-width: 768px) {
-    #lightbox-prev, #lightbox-next { padding: 20px 14px; font-size: 28px; }
-    #lightbox-counter { bottom: 56px; }
-    #lightbox-more { bottom: 24px; }
-  }
 
   /* FOOTER */
   footer {
@@ -399,54 +364,11 @@
 
   /* ── FILM GRAIN ── */
   #film-grain {
-    position: fixed; inset: 0; z-index: 90;
+    position: fixed; inset: 0; z-index: 9999;
     pointer-events: none;
     opacity: 0.025;
   }
 
-
-  /* ── HERO GRID ── */
-  html { scroll-behavior: smooth; }
-  .hero-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 3px;
-    padding: 0 0 48px;
-    max-width: 700px;
-    margin: 0 auto;
-    position: relative; z-index: 91;
-  }
-  .hero-grid-item {
-    position: relative; aspect-ratio: 3/4;
-    overflow: hidden; cursor: pointer; background: #111;
-  }
-  .hero-grid-item img {
-    width: 100%; height: 100%; object-fit: cover; object-position: center top;
-    display: block; filter: brightness(0.82);
-    transition: filter 0.5s, transform 0.5s;
-  }
-  .hero-grid-item:hover img { filter: brightness(1); transform: scale(1.03); }
-  .hero-grid-overlay {
-    position: absolute; bottom: 0; left: 0; right: 0;
-    padding: 40px 18px 18px;
-    background: linear-gradient(transparent, rgba(8,8,8,0.78));
-    opacity: 0; transition: opacity 0.35s; pointer-events: none;
-  }
-  .hero-grid-item:hover .hero-grid-overlay { opacity: 1; }
-  .hero-grid-title {
-    font-family: 'Cormorant Garamond', serif; font-weight: 300;
-    font-size: 14px; letter-spacing: 0.2em;
-    color: var(--pink); text-transform: uppercase;
-  }
-  .hero-grid-price {
-    font-family: 'Space Mono', monospace;
-    font-size: 8px; letter-spacing: 0.15em;
-    color: rgba(200,160,176,0.75); margin-top: 4px;
-  }
-  @media (max-width: 768px) {
-    .hero-grid { grid-template-columns: repeat(4, 1fr); max-width: none; padding: 0; margin: 0 20px 36px; }
-    .piece { scroll-margin-top: 60px; }
-  }
 
   </style>
 </head>
@@ -459,12 +381,8 @@
 
 
 <div id="lightbox">
-  <button id="lightbox-close" aria-label="Close">&#x2715;</button>
-  <button id="lightbox-prev" aria-label="Previous">&#x2039;</button>
+  <span id="lightbox-close">Close</span>
   <img id="lightbox-img" src="" alt="">
-  <button id="lightbox-next" aria-label="Next">&#x203A;</button>
-  <div id="lightbox-counter"></div>
-  <button id="lightbox-more">More Info</button>
 </div>
 
 <nav>
@@ -489,8 +407,6 @@
     <div class="page-enquire">Enquiries — <a href="mailto:lyraswinter@proton.me">lyraswinter@proton.me</a></div>
   </div>
 </div>
-
-<div id="hero-grid" class="hero-grid"></div>
 
 <div class="sales">
 
@@ -654,79 +570,38 @@
 </footer>
 
 <script>
-  // ── LIGHTBOX (sales grid viewer) ──
-  var lbItems = [];
-  var lbIndex = 0;
-  var lbOpen = false;
-  var lightbox = document.getElementById('lightbox');
-  var lightboxImg = document.getElementById('lightbox-img');
-  var lbCounter = document.getElementById('lightbox-counter');
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+  let lightboxOpen = false;
 
-  function openLightbox(index) {
-    lbIndex = index;
-    lightboxImg.classList.remove('fade');
-    lightboxImg.src = lbItems[lbIndex].src;
-    lightboxImg.alt = lbItems[lbIndex].title;
-    updateLbCounter();
+  function openLightbox(el) {
+    const src = el.querySelector('img').src;
+    lightboxImg.src = src;
     lightbox.classList.add('open');
     document.body.style.overflow = 'hidden';
-    lbOpen = true;
+    lightboxOpen = true;
     history.pushState({ lightbox: true }, '');
   }
 
   function closeLightbox() {
     lightbox.classList.remove('open');
     document.body.style.overflow = '';
-    lbOpen = false;
+    lightboxOpen = false;
   }
 
-  function lbNav(dir) {
-    lightboxImg.classList.add('fade');
-    setTimeout(function() {
-      lbIndex = (lbIndex + dir + lbItems.length) % lbItems.length;
-      lightboxImg.src = lbItems[lbIndex].src;
-      lightboxImg.alt = lbItems[lbIndex].title;
-      updateLbCounter();
-      lightboxImg.classList.remove('fade');
-    }, 220);
-  }
-
-  function updateLbCounter() {
-    var cur = String(lbIndex + 1).padStart(2, '0');
-    var tot = String(lbItems.length).padStart(2, '0');
-    lbCounter.textContent = cur + ' — ' + tot;
-  }
-
-  document.getElementById('lightbox-close').addEventListener('click', function() {
-    if (lbOpen) history.back(); else closeLightbox();
-  });
-  document.getElementById('lightbox-prev').addEventListener('click', function() { lbNav(-1); });
-  document.getElementById('lightbox-next').addEventListener('click', function() { lbNav(1); });
-  document.getElementById('lightbox-more').addEventListener('click', function() {
-    var pieceId = lbItems[lbIndex].pieceId;
-    if (lbOpen) history.back();
-    setTimeout(function() {
-      var target = document.getElementById(pieceId);
-      if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }, 60);
+  document.getElementById('lightbox-close').addEventListener('click', () => {
+    if (lightboxOpen) history.back(); else closeLightbox();
   });
   lightbox.addEventListener('click', function(e) {
-    if (e.target === lightbox) { if (lbOpen) history.back(); else closeLightbox(); }
+    if (e.target === lightbox) { if (lightboxOpen) history.back(); else closeLightbox(); }
   });
   document.addEventListener('keydown', function(e) {
-    if (!lightbox.classList.contains('open')) return;
-    if (e.key === 'Escape') { if (lbOpen) history.back(); else closeLightbox(); }
-    if (e.key === 'ArrowLeft') lbNav(-1);
-    if (e.key === 'ArrowRight') lbNav(1);
+    if (e.key === 'Escape' && lightbox.classList.contains('open')) {
+      if (lightboxOpen) history.back(); else closeLightbox();
+    }
   });
   window.addEventListener('popstate', function() {
     if (lightbox.classList.contains('open')) closeLightbox();
-  });
-  var lbTouchX = 0;
-  lightbox.addEventListener('touchstart', function(e) { lbTouchX = e.touches[0].clientX; }, { passive: true });
-  lightbox.addEventListener('touchend', function(e) {
-    var dx = e.changedTouches[0].clientX - lbTouchX;
-    if (Math.abs(dx) > 40) lbNav(dx < 0 ? 1 : -1);
   });
 
 
@@ -830,41 +705,6 @@
     drawGrain();
   })();
 
-
-  // ── HERO GRID ──
-  (function() {
-    var grid = document.getElementById('hero-grid');
-    if (!grid) return;
-    document.querySelectorAll('.piece').forEach(function(piece) {
-      var titleEl = piece.querySelector('.piece-title');
-      var id = piece.id;
-      if (!titleEl || !id) return;
-      var title = titleEl.textContent.trim();
-      if (title === 'Title') return;
-      var heroImg = piece.querySelector('.piece-hero img');
-      if (!heroImg) heroImg = piece.querySelector('.thumb img');
-      if (!heroImg) return;
-      lbItems.push({ src: heroImg.src, title: title, pieceId: id });
-      var item = document.createElement('div');
-      item.className = 'hero-grid-item';
-      item.setAttribute('role', 'button');
-      item.setAttribute('tabindex', '0');
-      item.setAttribute('aria-label', title);
-      var img = document.createElement('img');
-      img.src = heroImg.src; img.alt = title;
-      var ovl = document.createElement('div');
-      ovl.className = 'hero-grid-overlay';
-      ovl.innerHTML = '<div class="hero-grid-title">' + title + '</div>';
-      item.appendChild(img); item.appendChild(ovl);
-      (function(idx) {
-        item.addEventListener('click', function() { openLightbox(idx); });
-        item.addEventListener('keydown', function(e) {
-          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openLightbox(idx); }
-        });
-      })(lbItems.length - 1);
-      grid.appendChild(item);
-    });
-  })();
 
 </script>
 
