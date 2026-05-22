@@ -498,6 +498,15 @@
     });
   });
 
+  // Restore cleanly from bfcache (browser back/forward)
+  window.addEventListener('pageshow', function(e) {
+    if (e.persisted) {
+      overlay.style.transition = 'opacity 0.4s ease';
+      overlay.style.opacity = '0';
+      if (ovLogo) { ovLogo.style.transition = 'opacity 0.3s ease'; ovLogo.style.opacity = '0'; }
+    }
+  });
+
   // ── NAV GLITCH ON HOVER ──
   document.querySelectorAll('.nav-links a').forEach(link => {
     link.addEventListener('mouseenter', function() {
