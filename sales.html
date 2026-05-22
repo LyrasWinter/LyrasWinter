@@ -277,13 +277,31 @@
     .page-right { text-align: left; }
     .piece {
       grid-template-columns: 1fr;
-      grid-template-areas: "text" "hero" "thumbs" "price" "enq";
+      grid-template-areas: "hero" "thumbs" "text" "price" "enq";
       padding: 48px 20px;
       column-gap: 0;
     }
+    .piece-bio { max-height: 5.5em; overflow: hidden; transition: max-height 0.4s ease; }
+    .piece-bio.expanded { max-height: 100em; }
+    .bio-toggle { display: inline-block; }
     .commissions { grid-template-columns: 1fr; padding: 60px 20px; gap: 28px; }
     footer { padding: 40px 20px; flex-direction: column; gap: 10px; text-align: center; }
   }
+
+
+  /* BIO TOGGLE — desktop hidden, mobile collapse */
+  .bio-toggle {
+    display: none;
+    background: none; border: none; padding: 0;
+    margin-top: 10px;
+    font-family: 'Space Mono', monospace;
+    font-size: 8px; letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--dim);
+    cursor: pointer;
+    transition: color 0.2s;
+  }
+  .bio-toggle:hover { color: var(--pink); }
 
   /* ── LOADING SCREEN ── */
   #loading-screen {
@@ -391,6 +409,7 @@
       <div class="piece-title">The Four Gentlemen</div>
       <div class="piece-meta">Sumi-e ink · Rice paper · Set of four · 32cm × 23.5cm each</div>
       <div class="piece-bio"><p>The Four Gentlemen is a tradition rooted in classical East Asian painting — four subjects, four seasons, four quiet studies in what it means to endure: orchid for spring, bamboo for summer, chrysanthemum for autumn, plum blossom for winter. The aesthetic is built on simplicity, minimalism, and the concept of ma — negative space — where what is left unpainted carries as much weight as the ink itself. There are no corrections in sumi-e. Every brushstroke is final, decisive, a direct reflection of the artist's state of mind in that exact moment.</p><p>My state of mind, as it happened, was heavily medicated.</p><p>I painted these during an online art course while working through severe back pain and an intimate acquaintance with opioids. I could not tell you how to replicate them. I'm not entirely sure I was the one making all the decisions. But the process became something I didn't expect — part of a long healing journey where my spirit needed as much recovery as my body did, and this quiet, unforgiving medium met me exactly where I was.</p><p>The fact that they turned out this well is either a testament to the practice, the painkillers, or both.</p><p>32cm × 23.5cm per painting. Available as a complete set of four.</p></div>
+      <button class="bio-toggle" aria-expanded="false">read more</button>
       <div class="piece-note">Contact via email for postage quotes.</div>
     </div>
     <div class="piece-thumbs grid2">
@@ -417,6 +436,7 @@
       <div class="piece-title">Sumi</div>
       <div class="piece-meta">Linocut relief print · Chine-collé · Artist's Proof · 2023</div>
       <div class="piece-bio"><p>Having completed a sumi-e ink painting course, I did what any reasonable artist does immediately after developing a new skill: abandoned the medium entirely and picked up a carving tool.</p><p>Linocut printmaking felt like a natural next step — or at least, that's what I told myself. The real goal was to see whether the spontaneity of sumi-e's single decisive brushstrokes could survive being translated into something permanent and carved. Spoiler: it can, but it has opinions about it.</p><p>'Sumi' is an abstract exploration of that translation — the fluid, gestural energy of ink brushwork reimagined through carved lino, printed in oil-based relief ink on high quality paper. The slash of deep red cutting across the composition is achieved through Chine-collé, a printmaking technique that bonds a separate paper layer during the printing process itself, adding both colour and texture in a single press.</p><p>This is an Artist's Proof — a once-off. There are no editions. What you see is what exists.</p><p>Print: 15cm × 15cm · Border: 18cm × 16cm</p></div>
+      <button class="bio-toggle" aria-expanded="false">read more</button>
       <div class="piece-note">Contact via email for postage quotes.</div>
     </div>
     <div class="piece-hero" onclick="openLightbox(this)">
@@ -437,6 +457,7 @@
       <div class="piece-title">Flower Wall</div>
       <div class="piece-meta">Silk &amp; synthetic florals · Dimensional wall piece · Mounted frame</div>
       <div class="piece-bio"><p>Somewhere between a painting and a garden, and considerably more dramatic than either.</p><p>This piece came from a very specific urge: to live amongst flowers and trees without the inconvenience of, well, outside. The solution was obviously to bring autumn indoors at scale — hundreds of high-quality fake flowers in deep burgundy, burnt orange, amber, and gold, layered and arranged across a mounted frame until the wall itself disappeared beneath them. Trailing strands of greenery spill from the bottom, because it needed just a little wildness to finish it off.</p><p>It hangs like a painting. It feels like walking into a forest at the exact right time of year.</p><p>The palette is unabashedly autumnal — warm, lush, and slightly maximalist in the way that only feels right when you're standing in front of it. It is, in short, a whole moment.</p><p>One of a kind. Enquire via email for postage and handling options.</p></div>
+      <button class="bio-toggle" aria-expanded="false">read more</button>
       <div class="piece-note">Contact via email for postage and handling options.</div>
     </div>
     <div class="piece-hero" onclick="openLightbox(this)">
@@ -463,6 +484,7 @@
       <div class="piece-title">Memories of Dragon Eggs</div>
       <div class="piece-meta">Sculpted &amp; hand-painted · Personal renditions · Set of three</div>
       <div class="piece-bio"><p>There are some descriptions in fiction that lodge themselves somewhere behind your eyes and simply refuse to leave.</p><p>George R.R. Martin's description of Daenerys Targaryen's dragon eggs was one of those for me:</p><p>"One egg was a deep green, with burnished bronze flecks that came and went depending on how Dany turned it. Another was pale cream streaked with gold. The last was black, as black as a midnight sea, yet alive with scarlet ripples and swirls."</p><p>I couldn't get them out of my head. So I made them instead.</p><p>These are my personal renditions — what I saw when I read those words, pulled from imagination and made tangible. They are not screen-accurate replicas. They are something closer to a reader's memory of a thing that never existed, which feels more honest anyway.</p><p>The three sit together as a set, as they should. Some things are just meant to be kept together.</p><p>Approx. height 10cm · Width approx. 7cm · Perfect for bookshelf display</p></div>
+      <button class="bio-toggle" aria-expanded="false">read more</button>
       <div class="piece-note">Contact via email for postage and handling quotes.</div>
     </div>
     <div class="piece-hero landscape" onclick="openLightbox(this)">
@@ -489,6 +511,7 @@
       <div class="piece-title">Title</div>
       <div class="piece-meta">Medium · dimensions · year</div>
       <div class="piece-bio"><p>Bio paragraph.</p></div>
+      <button class="bio-toggle" aria-expanded="false">read more</button>
       <div class="piece-note">Postage note if needed.</div>
     </div>
     <div class="piece-hero" onclick="openLightbox(this)">
@@ -542,6 +565,17 @@
 
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') closeLightbox();
+  });
+
+
+  // ── BIO TOGGLE ──
+  document.querySelectorAll('.bio-toggle').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const bio = this.previousElementSibling;
+      const expanded = bio.classList.toggle('expanded');
+      this.textContent = expanded ? 'read less' : 'read more';
+      this.setAttribute('aria-expanded', expanded);
+    });
   });
 
   // ── LOADING SCREEN ──
