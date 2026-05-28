@@ -996,13 +996,26 @@
         var x  = 0;
         while (x < W) {
           var bw = (14 + Math.random() * 72) | 0;
+          var _cm = Math.random(), _cr, _cg, _cb;
+          if (_cm < 0.35) {
+            var _ch = Math.floor(Math.random() * 3);
+            _cr = _ch === 0 ? (200 + Math.random() * 55 | 0) : (Math.random() * 30 | 0);
+            _cg = _ch === 1 ? (200 + Math.random() * 55 | 0) : (Math.random() * 30 | 0);
+            _cb = _ch === 2 ? (200 + Math.random() * 55 | 0) : (Math.random() * 30 | 0);
+          } else if (_cm < 0.55) {
+            _cr = _cg = _cb = 220 + Math.random() * 35 | 0;
+          } else if (_cm < 0.85) {
+            _cr = _cg = _cb = 0;
+          } else {
+            _cr = Math.random() * 255 | 0;
+            _cg = Math.random() * 255 | 0;
+            _cb = Math.random() * 255 | 0;
+          }
           blocks.push({
             x: x, y: y,
             w: Math.min(bw, W - x),
             h: Math.min(bh, H - y),
-            r: Math.random() * 255 | 0,
-            g: Math.random() * 255 | 0,
-            b: Math.random() * 255 | 0,
+            r: _cr, g: _cg, b: _cb,
             kind: Math.random(),
             smear: Math.random() < 0.09,
             tick: Math.random() * 5 | 0,
@@ -1020,7 +1033,6 @@
       var W  = window.innerWidth;
       var H  = window.innerHeight;
       var cx = W / 2, cy = H / 2;
-      var maxDist = Math.sqrt(cx * cx + cy * cy);
 
       var cv = document.createElement('canvas');
       cv.width = W; cv.height = H;
@@ -1034,30 +1046,50 @@
       var raf;
 
       function drawCorruption(t) {
+        // Snap-to-dark at t=1400: solid black + sparse fading scanlines
+        if (t >= 1400) {
+          ctx.fillStyle = '#000';
+          ctx.fillRect(0, 0, W, H);
+          var lineOpacity = Math.max(0, 1 - (t - 1400) / 300) * 0.18;
+          if (lineOpacity > 0) {
+            refreshNoise();
+            var nl = 4 + Math.floor(Math.random() * 3);
+            for (var l = 0; l < nl; l++) {
+              var ly = Math.random() * H | 0;
+              var lh = (1 + Math.random() * 3) | 0;
+              ctx.globalAlpha = lineOpacity * (0.4 + Math.random() * 0.6);
+              ctx.drawImage(_noiseCv, 0, 0, 128, 128, 0, ly, W, lh);
+            }
+            ctx.globalAlpha = 1;
+          }
+          return;
+        }
+
+        // Chaos phase (t < 1400)
         ctx.fillStyle = '#000';
         ctx.fillRect(0, 0, W, H);
 
         noiseAge++;
         if (noiseAge % 3 === 0) refreshNoise();
 
-        var consolidate = t > 900 ? Math.min((t - 900) / 900, 1) : 0;
+        var isBlizzard = t >= 800;
 
         for (var i = 0; i < blocks.length; i++) {
-          var b   = blocks[i];
-          var bcx = b.x + b.w / 2, bcy = b.y + b.h / 2;
-          var dist = Math.sqrt((bcx - cx) * (bcx - cx) + (bcy - cy) * (bcy - cy));
-          var norm = dist / maxDist;
+          var b = blocks[i];
 
-          if (consolidate > 0 && norm > (1 - consolidate * 0.88)) {
-            continue; // black base already covers it
-          }
-
-          b.tick++;
-          if (b.tick % b.rate === 0) {
+          if (isBlizzard) {
             b.r = Math.random() * 255 | 0;
             b.g = Math.random() * 255 | 0;
             b.b = Math.random() * 255 | 0;
-            b.kind = Math.random();
+            b.kind = Math.random() < 0.5 ? 0.9 : Math.random() * 0.74;
+          } else {
+            b.tick++;
+            if (b.tick % b.rate === 0) {
+              b.r = Math.random() * 255 | 0;
+              b.g = Math.random() * 255 | 0;
+              b.b = Math.random() * 255 | 0;
+              b.kind = Math.random();
+            }
           }
 
           if (b.kind < 0.45) {
