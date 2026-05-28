@@ -997,19 +997,32 @@
         while (x < W) {
           var bw = (3 + Math.random() * 28) | 0;
           var _cm = Math.random(), _cr, _cg, _cb;
-          if (_cm < 0.35) {
-            var _ch = Math.floor(Math.random() * 3);
-            _cr = _ch === 0 ? (200 + Math.random() * 55 | 0) : (Math.random() * 30 | 0);
-            _cg = _ch === 1 ? (200 + Math.random() * 55 | 0) : (Math.random() * 30 | 0);
-            _cb = _ch === 2 ? (200 + Math.random() * 55 | 0) : (Math.random() * 30 | 0);
-          } else if (_cm < 0.55) {
-            _cr = _cg = _cb = 220 + Math.random() * 35 | 0;
-          } else if (_cm < 0.85) {
+          if (_cm < 0.25) {
+            _cr = Math.random() * 20 | 0;
+            _cg = 220 + Math.random() * 35 | 0;
+            _cb = 220 + Math.random() * 35 | 0;
+          } else if (_cm < 0.45) {
+            _cr = 220 + Math.random() * 35 | 0;
+            _cg = Math.random() * 30 | 0;
+            _cb = 200 + Math.random() * 55 | 0;
+          } else if (_cm < 0.60) {
+            _cr = Math.random() * 30 | 0;
+            _cg = 220 + Math.random() * 35 | 0;
+            _cb = 40 + Math.random() * 40 | 0;
+          } else if (_cm < 0.70) {
+            _cr = 220 + Math.random() * 35 | 0;
+            _cg = 220 + Math.random() * 35 | 0;
+            _cb = Math.random() * 20 | 0;
+          } else if (_cm < 0.90) {
             _cr = _cg = _cb = 0;
+          } else if (_cm < 1.00) {
+            _cr = 240 + Math.random() * 15 | 0;
+            _cg = 240 + Math.random() * 15 | 0;
+            _cb = 240 + Math.random() * 15 | 0;
           } else {
-            _cr = Math.random() * 255 | 0;
-            _cg = Math.random() * 255 | 0;
-            _cb = Math.random() * 255 | 0;
+            _cr = 200 + Math.random() * 55 | 0;
+            _cg = Math.random() * 20 | 0;
+            _cb = Math.random() * 40 | 0;
           }
           blocks.push({
             x: x, y: y,
@@ -1035,19 +1048,32 @@
           while (mx < W) {
             var mbw = (2 + Math.random() * 12) | 0;
           var _cm = Math.random(), _cr, _cg, _cb;
-          if (_cm < 0.35) {
-            var _ch = Math.floor(Math.random() * 3);
-            _cr = _ch === 0 ? (200 + Math.random() * 55 | 0) : (Math.random() * 30 | 0);
-            _cg = _ch === 1 ? (200 + Math.random() * 55 | 0) : (Math.random() * 30 | 0);
-            _cb = _ch === 2 ? (200 + Math.random() * 55 | 0) : (Math.random() * 30 | 0);
-          } else if (_cm < 0.55) {
-            _cr = _cg = _cb = 220 + Math.random() * 35 | 0;
-          } else if (_cm < 0.85) {
+          if (_cm < 0.25) {
+            _cr = Math.random() * 20 | 0;
+            _cg = 220 + Math.random() * 35 | 0;
+            _cb = 220 + Math.random() * 35 | 0;
+          } else if (_cm < 0.45) {
+            _cr = 220 + Math.random() * 35 | 0;
+            _cg = Math.random() * 30 | 0;
+            _cb = 200 + Math.random() * 55 | 0;
+          } else if (_cm < 0.60) {
+            _cr = Math.random() * 30 | 0;
+            _cg = 220 + Math.random() * 35 | 0;
+            _cb = 40 + Math.random() * 40 | 0;
+          } else if (_cm < 0.70) {
+            _cr = 220 + Math.random() * 35 | 0;
+            _cg = 220 + Math.random() * 35 | 0;
+            _cb = Math.random() * 20 | 0;
+          } else if (_cm < 0.90) {
             _cr = _cg = _cb = 0;
+          } else if (_cm < 1.00) {
+            _cr = 240 + Math.random() * 15 | 0;
+            _cg = 240 + Math.random() * 15 | 0;
+            _cb = 240 + Math.random() * 15 | 0;
           } else {
-            _cr = Math.random() * 255 | 0;
-            _cg = Math.random() * 255 | 0;
-            _cb = Math.random() * 255 | 0;
+            _cr = 200 + Math.random() * 55 | 0;
+            _cg = Math.random() * 20 | 0;
+            _cb = Math.random() * 40 | 0;
           }
             blocks.push({
               x: mx, y: my,
