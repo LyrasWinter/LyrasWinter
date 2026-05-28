@@ -476,41 +476,7 @@
     filter: drop-shadow(0 0 20px rgba(232,160,180,0.35));
   }
 
-    /* ── GLITCH BREAK ── */
-  #glitch-break {
-    position: fixed; inset: 0; z-index: 99997;
-    pointer-events: none; overflow: hidden; display: none;
-  }
-  #glitch-break.active { display: block; }
-  #glitch-eyes-wrap {
-    position: absolute; left: 50%; top: 40%;
-    transform: translate(-50%, -50%);
-    width: min(160px, 36vw); opacity: 0; pointer-events: none;
-  }
-  #glitch-eyes-wrap img { width: 100%; display: block; }
-  #glitch-num {
-    position: absolute; left: 50%; top: 58%;
-    transform: translate(-50%, -50%);
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(64px, 13vw, 110px); font-weight: 300;
-    color: #e8a0b4; opacity: 0; line-height: 1; user-select: none;
-  }
-  @keyframes glitch-jitter {
-    0%   { transform: translateX(0); }
-    12%  { transform: translateX(-11px); }
-    25%  { transform: translateX(9px); }
-    37%  { transform: translateX(-7px); }
-    50%  { transform: translateX(6px); }
-    62%  { transform: translateX(-4px); }
-    75%  { transform: translateX(3px); }
-    88%  { transform: translateX(-2px); }
-    100% { transform: translateX(0); }
-  }
-  body.glitch-jitter main,
-  body.glitch-jitter nav,
-  body.glitch-jitter footer { animation: glitch-jitter 0.09s steps(1) infinite; }
-
-  /* ── NAV GLITCH ── */
+    /* ── NAV GLITCH ── */
   .nav-links a {
     position: relative;
   }
@@ -981,10 +947,29 @@
   
 
 
-  // ── GLITCH BREAK ──
+
+  
+  // ── DIGITAL CORRUPTION BREAK ──
   (function() {
-    var _active = false;
+    var _active  = false;
     var _leaving = false;
+
+    var _logo = new Image();
+    _logo.src = 'Logo_No_Background_Vector.svg';
+
+    var _noiseCv  = document.createElement('canvas');
+    _noiseCv.width = _noiseCv.height = 128;
+    var _noiseCtx = _noiseCv.getContext('2d');
+    function refreshNoise() {
+      var id = _noiseCtx.createImageData(128, 128);
+      var d  = id.data;
+      for (var i = 0; i < d.length; i += 4) {
+        var v = Math.random() * 255 | 0;
+        d[i] = v; d[i+1] = v; d[i+2] = v; d[i+3] = 215;
+      }
+      _noiseCtx.putImageData(id, 0, 0);
+    }
+    refreshNoise();
 
     window.addEventListener('pagehide', function() { _leaving = true; });
     document.querySelectorAll('a[href]').forEach(function(a) {
@@ -1004,133 +989,172 @@
       }, ms);
     }
 
+    function genBlocks(W, H) {
+      var blocks = [], y = 0;
+      while (y < H) {
+        var bh = (8 + Math.random() * 36) | 0;
+        var x  = 0;
+        while (x < W) {
+          var bw = (14 + Math.random() * 72) | 0;
+          blocks.push({
+            x: x, y: y,
+            w: Math.min(bw, W - x),
+            h: Math.min(bh, H - y),
+            r: Math.random() * 255 | 0,
+            g: Math.random() * 255 | 0,
+            b: Math.random() * 255 | 0,
+            kind: Math.random(),
+            smear: Math.random() < 0.09,
+            tick: Math.random() * 5 | 0,
+            rate: (1 + Math.random() * 4) | 0,
+          });
+          x += bw;
+        }
+        y += bh;
+      }
+      return blocks;
+    }
+
     function run() {
       _active = true;
-
-      // Build overlay
-      var wrap = document.createElement('div');
-      wrap.id = 'glitch-break';
+      var W  = window.innerWidth;
+      var H  = window.innerHeight;
+      var cx = W / 2, cy = H / 2;
+      var maxDist = Math.sqrt(cx * cx + cy * cy);
 
       var cv = document.createElement('canvas');
-      cv.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;display:block;';
-      wrap.appendChild(cv);
-
-      var eyeWrap = document.createElement('div');
-      eyeWrap.id = 'glitch-eyes-wrap';
-      var eyeImg = document.createElement('img');
-      eyeImg.src = 'Logo_No_Background_Vector.svg';
-      eyeImg.alt = '';
-      eyeWrap.appendChild(eyeImg);
-      wrap.appendChild(eyeWrap);
-
-      var numEl = document.createElement('div');
-      numEl.id = 'glitch-num';
-      numEl.textContent = '7';
-      wrap.appendChild(numEl);
-
-      document.body.appendChild(wrap);
-      wrap.classList.add('active');
-
-      // Canvas static
-      var mobile = window.matchMedia('(hover: none)').matches;
-      var W = cv.width  = mobile ? Math.floor(window.innerWidth  / 2) : window.innerWidth;
-      var H = cv.height = mobile ? Math.floor(window.innerHeight / 2) : window.innerHeight;
-      if (mobile) {
-        cv.style.imageRendering = 'pixelated';
-        cv.style.imageRendering = 'crisp-edges';
-      }
-      var ctx = cv.getContext('2d');
-      var density = mobile ? 0.5 : 0.72;
+      cv.width = W; cv.height = H;
+      cv.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;' +
+                         'z-index:9000;pointer-events:none;display:block;';
+      document.body.appendChild(cv);
+      var ctx    = cv.getContext('2d');
+      var blocks = genBlocks(W, H);
+      var noiseAge = 0;
       var t0 = Date.now();
       var raf;
 
-      function frame() {
-        var t = Date.now() - t0;
-        ctx.fillStyle = 'rgba(0,0,0,0.86)';
+      function drawCorruption(t) {
+        ctx.fillStyle = '#000';
         ctx.fillRect(0, 0, W, H);
 
-        // Pixel noise
-        var id = ctx.createImageData(W, H);
-        var d  = id.data;
-        for (var i = 0; i < d.length; i += 4) {
-          if (Math.random() < density) {
-            var v = Math.random() * 255 | 0;
-            d[i] = v; d[i+1] = v; d[i+2] = v;
-            d[i+3] = (Math.random() * 170 + 55) | 0;
+        noiseAge++;
+        if (noiseAge % 3 === 0) refreshNoise();
+
+        var consolidate = t > 900 ? Math.min((t - 900) / 900, 1) : 0;
+
+        for (var i = 0; i < blocks.length; i++) {
+          var b   = blocks[i];
+          var bcx = b.x + b.w / 2, bcy = b.y + b.h / 2;
+          var dist = Math.sqrt((bcx - cx) * (bcx - cx) + (bcy - cy) * (bcy - cy));
+          var norm = dist / maxDist;
+
+          if (consolidate > 0 && norm > (1 - consolidate * 0.88)) {
+            continue; // black base already covers it
+          }
+
+          b.tick++;
+          if (b.tick % b.rate === 0) {
+            b.r = Math.random() * 255 | 0;
+            b.g = Math.random() * 255 | 0;
+            b.b = Math.random() * 255 | 0;
+            b.kind = Math.random();
+          }
+
+          if (b.kind < 0.45) {
+            ctx.fillStyle = 'rgb(' + b.r + ',' + b.g + ',' + b.b + ')';
+            ctx.fillRect(b.x, b.y, b.w, b.h);
+            if (b.smear) {
+              var sLen = b.w * (2 + Math.random() * 5);
+              var grad = ctx.createLinearGradient(b.x, 0, b.x + sLen, 0);
+              grad.addColorStop(0, 'rgb(' + b.r + ',' + b.g + ',' + b.b + ')');
+              grad.addColorStop(1, 'rgba(' + b.r + ',' + b.g + ',' + b.b + ',0)');
+              ctx.fillStyle = grad;
+              ctx.fillRect(b.x, b.y, sLen, b.h);
+            }
+          } else if (b.kind < 0.60) {
+            ctx.fillStyle = 'rgb(' + (255-b.r) + ',' + (255-b.g) + ',' + (255-b.b) + ')';
+            ctx.fillRect(b.x, b.y, b.w, b.h);
+          } else if (b.kind < 0.75) {
+            // pure black — already covered by base fill
+          } else {
+            ctx.drawImage(_noiseCv, 0, 0, 128, 128, b.x, b.y, b.w, b.h);
           }
         }
-        ctx.putImageData(id, 0, 0);
-
-        // Scan lines
-        for (var y = 0; y < H; y += 3) {
-          ctx.fillStyle = 'rgba(0,0,0,0.32)';
-          ctx.fillRect(0, y, W, 1);
-        }
-
-        // Horizontal tear bands
-        var nb = mobile ? 4 : 9;
-        for (var b = 0; b < nb; b++) {
-          var by = Math.random() * H | 0;
-          var bh = 1 + Math.random() * 18;
-          var bx = (Math.random() - 0.5) * (mobile ? 18 : 38);
-          ctx.fillStyle = 'rgba(' + (Math.random()*220|0) + ',' +
-            (Math.random()*220|0) + ',' + (Math.random()*220|0) + ',0.16)';
-          ctx.fillRect(bx, by, W, bh);
-        }
-
-        // White tears
-        if (Math.random() < 0.18) {
-          ctx.fillStyle = 'rgba(255,255,255,' + (0.07 + Math.random() * 0.14).toFixed(2) + ')';
-          ctx.fillRect(0, Math.random() * H | 0, W, Math.random() * 3 + 0.5);
-        }
-
-        if (t < 2700) raf = requestAnimationFrame(frame);
       }
+
+      function drawEyes(opacity, glitch) {
+        if (!_logo.complete || !_logo.naturalWidth) return;
+        var iw = Math.min(160, W * 0.36);
+        var ih = iw * (_logo.naturalHeight / _logo.naturalWidth);
+        var ix = cx - iw / 2;
+        var iy = cy - ih / 2 - 50;
+        var jx = glitch * (Math.random() - 0.5) * 10;
+        ctx.save();
+        ctx.globalAlpha = opacity * 0.65;
+        try { ctx.filter = 'sepia(1) saturate(800%) hue-rotate(310deg)'; } catch(e){}
+        ctx.drawImage(_logo, ix - 5 + jx, iy, iw, ih);
+        try { ctx.filter = 'sepia(1) saturate(800%) hue-rotate(170deg)'; } catch(e){}
+        ctx.drawImage(_logo, ix + 5 - jx, iy, iw, ih);
+        try { ctx.filter = 'none'; } catch(e){}
+        ctx.globalAlpha = opacity * 0.88;
+        ctx.drawImage(_logo, ix + (Math.random() < 0.25 ? jx * 0.5 : 0), iy, iw, ih);
+        ctx.restore();
+      }
+
+      function drawSeven(opacity, corrupt) {
+        var fs = Math.max(64, Math.min(110, W * 0.13)) | 0;
+        var sy = cy + 65;
+        ctx.save();
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.font = 'italic 300 ' + fs + 'px "Cormorant Garamond", serif';
+        if (corrupt) {
+          var jx = (Math.random() - 0.5) * 8;
+          ctx.globalAlpha = opacity * 0.75;
+          ctx.fillStyle = 'rgba(255,0,80,0.9)';
+          ctx.fillText('7', cx - 4 + jx, sy);
+          ctx.fillStyle = 'rgba(0,200,255,0.9)';
+          ctx.fillText('7', cx + 4 - jx, sy);
+        }
+        ctx.globalAlpha = opacity;
+        ctx.fillStyle = '#e8a0b4';
+        ctx.fillText('7', cx, sy);
+        ctx.restore();
+      }
+
+      function frame() {
+        var t = Date.now() - t0;
+        drawCorruption(t);
+
+        if (t > 650) {
+          var ep = Math.min((t - 650) / 500, 1);
+          var gl = Math.max(0, 1 - ep * 0.6);
+          if (Math.random() < 0.28) ep *= 0.5;
+          drawEyes(ep, gl);
+        }
+
+        if (t > 1400 && t < 2200) {
+          var sp;
+          if (t < 1600)      sp = (t - 1400) / 200;
+          else if (t < 1750) sp = 1;
+          else               sp = Math.max(0, 1 - (t - 1750) / 450);
+          var corr = t < 1700;
+          if (corr && Math.random() < 0.3) sp *= 0.3;
+          drawSeven(sp, corr);
+        }
+
+        if (t < 2800) {
+          raf = requestAnimationFrame(frame);
+        } else {
+          cancelAnimationFrame(raf);
+          if (cv.parentNode) cv.parentNode.removeChild(cv);
+          _active = false;
+          schedule(180000 + Math.random() * 120000);
+        }
+      }
+
       frame();
-
-      // Body jitter
-      document.body.classList.add('glitch-jitter');
-
-      // Eyes (~600ms)
-      setTimeout(function() {
-        eyeWrap.style.opacity = '1';
-        var fc = 0;
-        var fi = setInterval(function() {
-          var r = (Math.random() * 7 - 3.5).toFixed(1);
-          eyeImg.style.filter =
-            'drop-shadow(' + (-3 - r) + 'px 0 rgba(255,0,80,0.88)) ' +
-            'drop-shadow(' + ( 3 + r) + 'px 0 rgba(0,200,255,0.88)) ' +
-            'drop-shadow(0 0 22px rgba(232,160,180,0.4))';
-          if (++fc > 14) clearInterval(fi);
-        }, 65);
-      }, 600);
-
-      // Seven (~1350ms)
-      setTimeout(function() { numEl.style.opacity = '1'; }, 1350);
-
-      // Seven corrupts (~1750ms)
-      setTimeout(function() {
-        var frames = ['7', '⁷', '7', '​', '7', '​', '​'];
-        var fi2 = 0;
-        var ct = setInterval(function() {
-          if (fi2 >= frames.length) { clearInterval(ct); numEl.style.opacity = '0'; return; }
-          numEl.textContent = frames[fi2] || '​';
-          numEl.style.opacity = frames[fi2].trim() ? String((Math.random() * 0.55 + 0.4).toFixed(2)) : '0';
-          fi2++;
-        }, 68);
-      }, 1750);
-
-      // Snap back (~2800ms)
-      setTimeout(function() {
-        cancelAnimationFrame(raf);
-        document.body.classList.remove('glitch-jitter');
-        if (wrap.parentNode) wrap.parentNode.removeChild(wrap);
-        _active = false;
-        schedule(180000 + Math.random() * 120000); // 3–5 min
-      }, 2800);
     }
 
-    // First trigger: 45–60 seconds
     schedule(45000 + Math.random() * 15000);
   })();
 
