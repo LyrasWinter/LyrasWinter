@@ -476,7 +476,41 @@
     filter: drop-shadow(0 0 20px rgba(232,160,180,0.35));
   }
 
-    /* ── NAV GLITCH ── */
+    /* ── GLITCH BREAK ── */
+  #glitch-break {
+    position: fixed; inset: 0; z-index: 99997;
+    pointer-events: none; overflow: hidden; display: none;
+  }
+  #glitch-break.active { display: block; }
+  #glitch-eyes-wrap {
+    position: absolute; left: 50%; top: 40%;
+    transform: translate(-50%, -50%);
+    width: min(160px, 36vw); opacity: 0; pointer-events: none;
+  }
+  #glitch-eyes-wrap img { width: 100%; display: block; }
+  #glitch-num {
+    position: absolute; left: 50%; top: 58%;
+    transform: translate(-50%, -50%);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(64px, 13vw, 110px); font-weight: 300;
+    color: #e8a0b4; opacity: 0; line-height: 1; user-select: none;
+  }
+  @keyframes glitch-jitter {
+    0%   { transform: translateX(0); }
+    12%  { transform: translateX(-11px); }
+    25%  { transform: translateX(9px); }
+    37%  { transform: translateX(-7px); }
+    50%  { transform: translateX(6px); }
+    62%  { transform: translateX(-4px); }
+    75%  { transform: translateX(3px); }
+    88%  { transform: translateX(-2px); }
+    100% { transform: translateX(0); }
+  }
+  body.glitch-jitter main,
+  body.glitch-jitter nav,
+  body.glitch-jitter footer { animation: glitch-jitter 0.09s steps(1) infinite; }
+
+  /* ── NAV GLITCH ── */
   .nav-links a {
     position: relative;
   }
@@ -859,18 +893,23 @@
   })();
 
   // ── STREAMER → WRITER FLICKER ──
+  var _firstFlicker = true;
   function scheduleStreamerFlicker() {
-    setTimeout(doStreamerFlicker, 15000 + Math.random() * 10000);
+    var delay = _firstFlicker
+      ? 8000 + Math.random() * 4000
+      : 15000 + Math.random() * 10000;
+    _firstFlicker = false;
+    setTimeout(doStreamerFlicker, delay);
   }
   function doStreamerFlicker() {
     const el = document.getElementById('streamer-word');
     if (!el) return;
     const seq = [
-      [77,  'writer',   '-2px 0 rgba(255,0,80,0.85), 2px 0 rgba(0,200,255,0.85)'],
-      [55,  'streamer', '2px 0 rgba(255,0,80,0.5), -2px 0 rgba(0,200,255,0.5)'],
-      [121, 'writer',   '-1px 0 rgba(255,0,80,0.9), 1px 0 rgba(0,200,255,0.9)'],
+      [50,  'writer',   '-2px 0 rgba(255,0,80,0.9), 2px 0 rgba(0,200,255,0.9)'],
+      [35,  'streamer', '2px 0 rgba(255,0,80,0.45), -2px 0 rgba(0,200,255,0.45)'],
+      [240, 'writer',   '-1px 0 rgba(255,0,80,0.7), 1px 0 rgba(0,200,255,0.7)'],
       [45,  'streamer', 'none'],
-      [99,  'writer',   '1px 0 rgba(255,0,80,0.7), -1px 0 rgba(0,200,255,0.7)'],
+      [90,  'writer',   '1px 0 rgba(255,0,80,0.5), -1px 0 rgba(0,200,255,0.5)'],
       [0,   'streamer', 'none'],
     ];
     let t = 0;
@@ -941,7 +980,161 @@
   
   
 
-})();
+
+  // ── GLITCH BREAK ──
+  (function() {
+    var _active = false;
+    var _leaving = false;
+
+    window.addEventListener('pagehide', function() { _leaving = true; });
+    document.querySelectorAll('a[href]').forEach(function(a) {
+      var h = a.getAttribute('href') || '';
+      if (!h.startsWith('#') && !h.startsWith('mailto') && !h.startsWith('http')) {
+        a.addEventListener('click', function() { _leaving = true; });
+      }
+    });
+
+    function schedule(ms) {
+      setTimeout(function() {
+        if (_active || _leaving || (typeof clickCount !== 'undefined' && clickCount > 0)) {
+          schedule(12000 + Math.random() * 6000);
+          return;
+        }
+        run();
+      }, ms);
+    }
+
+    function run() {
+      _active = true;
+
+      // Build overlay
+      var wrap = document.createElement('div');
+      wrap.id = 'glitch-break';
+
+      var cv = document.createElement('canvas');
+      cv.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;display:block;';
+      wrap.appendChild(cv);
+
+      var eyeWrap = document.createElement('div');
+      eyeWrap.id = 'glitch-eyes-wrap';
+      var eyeImg = document.createElement('img');
+      eyeImg.src = 'Logo_No_Background_Vector.svg';
+      eyeImg.alt = '';
+      eyeWrap.appendChild(eyeImg);
+      wrap.appendChild(eyeWrap);
+
+      var numEl = document.createElement('div');
+      numEl.id = 'glitch-num';
+      numEl.textContent = '7';
+      wrap.appendChild(numEl);
+
+      document.body.appendChild(wrap);
+      wrap.classList.add('active');
+
+      // Canvas static
+      var mobile = window.matchMedia('(hover: none)').matches;
+      var W = cv.width  = mobile ? Math.floor(window.innerWidth  / 2) : window.innerWidth;
+      var H = cv.height = mobile ? Math.floor(window.innerHeight / 2) : window.innerHeight;
+      if (mobile) {
+        cv.style.imageRendering = 'pixelated';
+        cv.style.imageRendering = 'crisp-edges';
+      }
+      var ctx = cv.getContext('2d');
+      var density = mobile ? 0.5 : 0.72;
+      var t0 = Date.now();
+      var raf;
+
+      function frame() {
+        var t = Date.now() - t0;
+        ctx.fillStyle = 'rgba(0,0,0,0.86)';
+        ctx.fillRect(0, 0, W, H);
+
+        // Pixel noise
+        var id = ctx.createImageData(W, H);
+        var d  = id.data;
+        for (var i = 0; i < d.length; i += 4) {
+          if (Math.random() < density) {
+            var v = Math.random() * 255 | 0;
+            d[i] = v; d[i+1] = v; d[i+2] = v;
+            d[i+3] = (Math.random() * 170 + 55) | 0;
+          }
+        }
+        ctx.putImageData(id, 0, 0);
+
+        // Scan lines
+        for (var y = 0; y < H; y += 3) {
+          ctx.fillStyle = 'rgba(0,0,0,0.32)';
+          ctx.fillRect(0, y, W, 1);
+        }
+
+        // Horizontal tear bands
+        var nb = mobile ? 4 : 9;
+        for (var b = 0; b < nb; b++) {
+          var by = Math.random() * H | 0;
+          var bh = 1 + Math.random() * 18;
+          var bx = (Math.random() - 0.5) * (mobile ? 18 : 38);
+          ctx.fillStyle = 'rgba(' + (Math.random()*220|0) + ',' +
+            (Math.random()*220|0) + ',' + (Math.random()*220|0) + ',0.16)';
+          ctx.fillRect(bx, by, W, bh);
+        }
+
+        // White tears
+        if (Math.random() < 0.18) {
+          ctx.fillStyle = 'rgba(255,255,255,' + (0.07 + Math.random() * 0.14).toFixed(2) + ')';
+          ctx.fillRect(0, Math.random() * H | 0, W, Math.random() * 3 + 0.5);
+        }
+
+        if (t < 2700) raf = requestAnimationFrame(frame);
+      }
+      frame();
+
+      // Body jitter
+      document.body.classList.add('glitch-jitter');
+
+      // Eyes (~600ms)
+      setTimeout(function() {
+        eyeWrap.style.opacity = '1';
+        var fc = 0;
+        var fi = setInterval(function() {
+          var r = (Math.random() * 7 - 3.5).toFixed(1);
+          eyeImg.style.filter =
+            'drop-shadow(' + (-3 - r) + 'px 0 rgba(255,0,80,0.88)) ' +
+            'drop-shadow(' + ( 3 + r) + 'px 0 rgba(0,200,255,0.88)) ' +
+            'drop-shadow(0 0 22px rgba(232,160,180,0.4))';
+          if (++fc > 14) clearInterval(fi);
+        }, 65);
+      }, 600);
+
+      // Seven (~1350ms)
+      setTimeout(function() { numEl.style.opacity = '1'; }, 1350);
+
+      // Seven corrupts (~1750ms)
+      setTimeout(function() {
+        var frames = ['7', '⁷', '7', '​', '7', '​', '​'];
+        var fi2 = 0;
+        var ct = setInterval(function() {
+          if (fi2 >= frames.length) { clearInterval(ct); numEl.style.opacity = '0'; return; }
+          numEl.textContent = frames[fi2] || '​';
+          numEl.style.opacity = frames[fi2].trim() ? String((Math.random() * 0.55 + 0.4).toFixed(2)) : '0';
+          fi2++;
+        }, 68);
+      }, 1750);
+
+      // Snap back (~2800ms)
+      setTimeout(function() {
+        cancelAnimationFrame(raf);
+        document.body.classList.remove('glitch-jitter');
+        if (wrap.parentNode) wrap.parentNode.removeChild(wrap);
+        _active = false;
+        schedule(180000 + Math.random() * 120000); // 3–5 min
+      }, 2800);
+    }
+
+    // First trigger: 45–60 seconds
+    schedule(45000 + Math.random() * 15000);
+  })();
+
+  })();
 
 </script>
 
