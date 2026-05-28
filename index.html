@@ -992,10 +992,10 @@
     function genBlocks(W, H) {
       var blocks = [], y = 0;
       while (y < H) {
-        var bh = (8 + Math.random() * 36) | 0;
+        var bh = (2 + Math.random() * 14) | 0;
         var x  = 0;
         while (x < W) {
-          var bw = (14 + Math.random() * 72) | 0;
+          var bw = (3 + Math.random() * 28) | 0;
           var _cm = Math.random(), _cr, _cg, _cb;
           if (_cm < 0.35) {
             var _ch = Math.floor(Math.random() * 3);
@@ -1020,10 +1020,51 @@
             smear: Math.random() < 0.09,
             tick: Math.random() * 5 | 0,
             rate: (1 + Math.random() * 4) | 0,
+            dx: (Math.random() - 0.5) * 0.4,
+            dy: (Math.random() - 0.5) * 0.15,
           });
           x += bw;
         }
         y += bh;
+      }
+      var my = 0;
+      while (my < H) {
+        var mbh = (1 + Math.random() * 5) | 0;
+        if (Math.random() < 0.4) {
+          var mx = 0;
+          while (mx < W) {
+            var mbw = (2 + Math.random() * 12) | 0;
+          var _cm = Math.random(), _cr, _cg, _cb;
+          if (_cm < 0.35) {
+            var _ch = Math.floor(Math.random() * 3);
+            _cr = _ch === 0 ? (200 + Math.random() * 55 | 0) : (Math.random() * 30 | 0);
+            _cg = _ch === 1 ? (200 + Math.random() * 55 | 0) : (Math.random() * 30 | 0);
+            _cb = _ch === 2 ? (200 + Math.random() * 55 | 0) : (Math.random() * 30 | 0);
+          } else if (_cm < 0.55) {
+            _cr = _cg = _cb = 220 + Math.random() * 35 | 0;
+          } else if (_cm < 0.85) {
+            _cr = _cg = _cb = 0;
+          } else {
+            _cr = Math.random() * 255 | 0;
+            _cg = Math.random() * 255 | 0;
+            _cb = Math.random() * 255 | 0;
+          }
+            blocks.push({
+              x: mx, y: my,
+              w: Math.min(mbw, W - mx),
+              h: Math.min(mbh, H - my),
+              r: _cr, g: _cg, b: _cb,
+              kind: Math.random(),
+              smear: false,
+              tick: Math.random() * 5 | 0,
+              rate: (1 + Math.random() * 3) | 0,
+              dx: (Math.random() - 0.5) * 0.4,
+              dy: (Math.random() - 0.5) * 0.15,
+            });
+            mx += mbw;
+          }
+        }
+        my += mbh;
       }
       return blocks;
     }
@@ -1092,24 +1133,26 @@
             }
           }
 
+          var ox = b.x + b.dx * t * 0.01;
+          var oy = b.y + b.dy * t * 0.01;
           if (b.kind < 0.45) {
             ctx.fillStyle = 'rgb(' + b.r + ',' + b.g + ',' + b.b + ')';
-            ctx.fillRect(b.x, b.y, b.w, b.h);
+            ctx.fillRect(ox, oy, b.w, b.h);
             if (b.smear) {
               var sLen = b.w * (2 + Math.random() * 5);
               var grad = ctx.createLinearGradient(b.x, 0, b.x + sLen, 0);
               grad.addColorStop(0, 'rgb(' + b.r + ',' + b.g + ',' + b.b + ')');
               grad.addColorStop(1, 'rgba(' + b.r + ',' + b.g + ',' + b.b + ',0)');
               ctx.fillStyle = grad;
-              ctx.fillRect(b.x, b.y, sLen, b.h);
+              ctx.fillRect(ox, oy, sLen, b.h);
             }
           } else if (b.kind < 0.60) {
             ctx.fillStyle = 'rgb(' + (255-b.r) + ',' + (255-b.g) + ',' + (255-b.b) + ')';
-            ctx.fillRect(b.x, b.y, b.w, b.h);
+            ctx.fillRect(ox, oy, b.w, b.h);
           } else if (b.kind < 0.75) {
             // pure black — already covered by base fill
           } else {
-            ctx.drawImage(_noiseCv, 0, 0, 128, 128, b.x, b.y, b.w, b.h);
+            ctx.drawImage(_noiseCv, 0, 0, 128, 128, ox, oy, b.w, b.h);
           }
         }
       }
