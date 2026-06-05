@@ -306,7 +306,26 @@
   }
 
 
-  </style>
+  
+  /* ── LIGHTBOX NAVIGATION ── */
+  #lightbox-prev, #lightbox-next {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    background: none; border: none;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--dim); cursor: pointer;
+    transition: color 0.2s; padding: 20px 28px;
+    z-index: 501; user-select: none;
+  }
+  #lightbox-prev { left: 0; }
+  #lightbox-next { right: 0; }
+  #lightbox-prev:hover, #lightbox-next:hover { color: var(--pink); }
+  #lightbox-prev:disabled, #lightbox-next:disabled { opacity: 0.18; pointer-events: none; }
+  #lightbox-counter {
+    position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%);
+    font-size: 8px; letter-spacing: 0.2em; color: var(--dim); text-transform: uppercase;
+  }
+</style>
 </head>
 <body>
 <canvas id="film-grain"></canvas>
@@ -318,7 +337,10 @@
 
 <div id="lightbox">
   <span id="lightbox-close">Close</span>
+  <button id="lightbox-prev" aria-label="Previous">&#8592;</button>
   <img id="lightbox-img" src="" alt="">
+  <button id="lightbox-next" aria-label="Next">&#8594;</button>
+  <span id="lightbox-counter"></span>
 </div>
 
 <nav>
@@ -531,15 +553,35 @@
 <script>
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightbox-img');
+  const lbPrevBtn = document.getElementById('lightbox-prev');
+  const lbNextBtn = document.getElementById('lightbox-next');
+  const lbCounter = document.getElementById('lightbox-counter');
   let lightboxOpen = false;
+  let lbImages = [];
+  let lbIndex = 0;
 
   function openLightbox(el) {
-    const src = el.querySelector('img').src;
-    lightboxImg.src = src;
+    const piece = el.closest('.piece');
+    const imgs = Array.from(piece.querySelectorAll('[onclick] img'));
+    lbImages = imgs.map(i => i.src);
+    const clicked = el.querySelector('img');
+    lbIndex = imgs.indexOf(clicked);
+    if (lbIndex < 0) lbIndex = 0;
+    showLbImage(lbIndex);
     lightbox.classList.add('open');
     document.body.style.overflow = 'hidden';
     lightboxOpen = true;
     history.pushState({ lightbox: true }, '');
+  }
+
+  function showLbImage(i) {
+    lbIndex = i;
+    lightboxImg.src = lbImages[i];
+    lbPrevBtn.disabled = i === 0;
+    lbNextBtn.disabled = i === lbImages.length - 1;
+    lbPrevBtn.style.display = lbImages.length > 1 ? '' : 'none';
+    lbNextBtn.style.display = lbImages.length > 1 ? '' : 'none';
+    lbCounter.textContent = lbImages.length > 1 ? (i + 1) + ' / ' + lbImages.length : '';
   }
 
   function closeLightbox() {
@@ -548,20 +590,36 @@
     lightboxOpen = false;
   }
 
+  lbPrevBtn.addEventListener('click', function(e) { e.stopPropagation(); if (lbIndex > 0) showLbImage(lbIndex - 1); });
+  lbNextBtn.addEventListener('click', function(e) { e.stopPropagation(); if (lbIndex < lbImages.length - 1) showLbImage(lbIndex + 1); });
+
   document.getElementById('lightbox-close').addEventListener('click', () => {
     if (lightboxOpen) history.back(); else closeLightbox();
   });
   lightbox.addEventListener('click', function(e) {
-    if (e.target === lightbox) { if (lightboxOpen) history.back(); else closeLightbox(); }
+    if (e.target === lightbox || e.target === lightboxImg) { if (lightboxOpen) history.back(); else closeLightbox(); }
   });
   document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && lightbox.classList.contains('open')) {
-      if (lightboxOpen) history.back(); else closeLightbox();
-    }
+    if (!lightbox.classList.contains('open')) return;
+    if (e.key === 'Escape') { if (lightboxOpen) history.back(); else closeLightbox(); }
+    if (e.key === 'ArrowLeft'  && lbIndex > 0) showLbImage(lbIndex - 1);
+    if (e.key === 'ArrowRight' && lbIndex < lbImages.length - 1) showLbImage(lbIndex + 1);
   });
   window.addEventListener('popstate', function() {
     if (lightbox.classList.contains('open')) closeLightbox();
   });
+
+  // Touch swipe
+  let lbTouchX = null;
+  lightbox.addEventListener('touchstart', e => { lbTouchX = e.touches[0].clientX; }, { passive: true });
+  lightbox.addEventListener('touchend', e => {
+    if (lbTouchX === null) return;
+    const dx = e.changedTouches[0].clientX - lbTouchX;
+    lbTouchX = null;
+    if (Math.abs(dx) < 40) return;
+    if (dx < 0 && lbIndex < lbImages.length - 1) showLbImage(lbIndex + 1);
+    if (dx > 0 && lbIndex > 0) showLbImage(lbIndex - 1);
+  }, { passive: true });
 
   // ── BIO TOGGLE ──
   document.querySelectorAll('.bio-toggle').forEach(btn => {
