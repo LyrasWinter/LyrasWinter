@@ -272,13 +272,18 @@
   }
 
 
+  #lookbook-img-wrap {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
   #lookbook-credit {
-    position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
     font-family: 'Space Mono', monospace;
     font-size: 7px; letter-spacing: 0.18em; text-transform: uppercase;
     color: rgba(255,255,255,0.3);
     white-space: nowrap;
     pointer-events: none;
+    padding-top: 6px;
   }
 </style>
 </head>
@@ -293,10 +298,12 @@
 <div id="lookbook">
   <button id="lookbook-close" aria-label="Close">&#x2715;</button>
   <button id="lookbook-prev" aria-label="Previous">&#x2039;</button>
-  <img id="lookbook-img" src="" alt="">
+  <div id="lookbook-img-wrap">
+    <img id="lookbook-img" src="" alt="">
+    <div id="lookbook-credit"></div>
+  </div>
   <button id="lookbook-next" aria-label="Next">&#x203A;</button>
   <div id="lookbook-counter"></div>
-  <div id="lookbook-credit"></div>
 </div>
 
 <nav>
