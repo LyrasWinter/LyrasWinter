@@ -520,6 +520,22 @@
 </svg>
 </head>
 <body>
+<nav class="lw-nav">
+  <button class="lw-hamburger" id="lwHamburger" onclick="lwOpenNav()" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="lw-nav-overlay" id="lwOverlay" onclick="lwCloseNav()"></div>
+<div class="lw-nav-menu" id="lwNavMenu">
+  <button class="lw-nav-close" onclick="lwCloseNav()">✕ close</button>
+  <a href="/index.html" class="active" data-text="Home">Home</a>
+  <a href="/modelling.html" data-text="Modelling">Modelling</a>
+  <a href="/gallery.html" data-text="Gallery">Gallery</a>
+  <a href="/sales.html" data-text="Art Sales">Art Sales</a>
+  <a href="/about.html" data-text="About">About</a>
+  <div class="lw-nav-divider"></div>
+  <a href="mailto:lyraswinter@proton.me" data-text="Email">Email</a>
+</div>
 <div id="transition-overlay"><img id="overlay-logo" src="Logo_No_Background_Vector.svg" alt=""></div>
 <canvas id="film-grain"></canvas>
 
@@ -1271,5 +1287,21 @@
 
 </script>
 
+
+<script>
+  function lwOpenNav() {
+    document.getElementById('lwNavMenu').classList.add('open');
+    document.getElementById('lwOverlay').classList.add('open');
+    document.getElementById('lwHamburger').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function lwCloseNav() {
+    document.getElementById('lwNavMenu').classList.remove('open');
+    document.getElementById('lwOverlay').classList.remove('open');
+    document.getElementById('lwHamburger').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') lwCloseNav(); });
+</script>
 </body>
 </html>
