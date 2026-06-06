@@ -217,19 +217,12 @@
     .trigger {
       color: var(--pink);
       cursor: pointer;
-      border-bottom: 1px solid var(--dim);
-      transition: color 0.2s, border-color 0.2s;
+      transition: color 0.2s;
       position: relative;
       white-space: nowrap;
     }
-    .trigger:hover {
-      color: var(--white);
-      border-color: var(--pink);
-    }
-    .trigger.active {
-      color: var(--white);
-      border-color: var(--pink);
-    }
+    .trigger:hover { color: var(--white); }
+    .trigger.active { color: var(--white); }
 
     /* ── POPUP PANELS ── */
     .popup-overlay {
@@ -291,14 +284,11 @@
 
     .popup ol li {
       counter-increment: popup-counter;
-      display: grid;
-      grid-template-columns: 1.8rem 1fr;
-      gap: 0.5rem;
+      display: flex;
+      gap: 1rem;
       margin-bottom: 1.4rem;
       font-size: 1rem;
-      line-height: 1.6;
       color: var(--text);
-      align-items: start;
     }
 
     .popup ol li::before {
@@ -306,28 +296,30 @@
       font-family: 'Space Mono', monospace;
       font-size: 0.65rem;
       color: var(--dim);
-      padding-top: 0.25em;
+      padding-top: 0.2em;
+      flex-shrink: 0;
+      width: 1rem;
+      text-align: right;
     }
 
     .popup ol li > div {
       display: flex;
       flex-direction: column;
-      gap: 0.35rem;
+      gap: 0.3rem;
+      flex: 1;
     }
 
     .popup ol li strong {
       color: var(--white);
       font-weight: 500;
-      display: block;
       line-height: 1.4;
     }
 
     .popup ol li em {
-      display: block;
       font-size: 0.9rem;
       color: var(--dim);
       font-style: italic;
-      line-height: 1.6;
+      line-height: 1.65;
     }
 
     .popup .honorable {
@@ -464,7 +456,6 @@
     <img src="https://www.lyraswinter.art/Logo_No_Background_Vector.svg" alt="Lyra Winter" />
   </a>
   <button class="nav-hamburger" onclick="openNav()" aria-label="Open menu">
-    <span></span><span></span><span></span>
   </button>
 </nav>
 
@@ -546,23 +537,18 @@
     <div class="popup-title">Top 5 Anime</div>
     <ol>
       <li>
-        <span></span>
         <div><strong>A Silent Voice</strong><em>Yes, I like hurting myself. One of the most powerful films — not just anime — to ever exist. Anime fan or not, everyone should watch this.</em></div>
       </li>
       <li>
-        <span></span>
         <div><strong>Psycho-Pass</strong></div>
       </li>
       <li>
-        <span></span>
         <div><strong>Demon Slayer</strong></div>
       </li>
       <li>
-        <span></span>
         <div><strong>Apothecary Diaries</strong></div>
       </li>
       <li>
-        <span></span>
         <div><strong>Horimiya</strong></div>
       </li>
     </ol>
@@ -581,20 +567,20 @@
     </div>
     <div class="tab-content active" id="scifi-films">
       <ol>
-        <li><span></span><div><strong>Arrival</strong><em>Hands down the best masterpiece of my life. My favourite film of all time. Full stop.</em></div></li>
-        <li><span></span><div><strong>The Fifth Element</strong></div></li>
-        <li><span></span><div><strong>Interstellar</strong></div></li>
-        <li><span></span><div><strong>Ex Machina</strong></div></li>
-        <li><span></span><div><strong>Blade Runner</strong></div></li>
+        <li><div><strong>Arrival</strong><em>Hands down the best masterpiece of my life. My favourite film of all time. Full stop.</em></div></li>
+        <li><div><strong>The Fifth Element</strong></div></li>
+        <li><div><strong>Interstellar</strong></div></li>
+        <li><div><strong>Ex Machina</strong></div></li>
+        <li><div><strong>Blade Runner</strong></div></li>
       </ol>
     </div>
     <div class="tab-content" id="scifi-tv">
       <ol>
-        <li><span></span><div><strong>12 Monkeys</strong><em>Yes, the TV show. Don't @ me.</em></div></li>
-        <li><span></span><div><strong>Severance</strong></div></li>
-        <li><span></span><div><strong>Mr. Robot</strong></div></li>
-        <li><span></span><div><strong>Westworld S1</strong></div></li>
-        <li><span></span><div><strong>Futurama</strong></div></li>
+        <li><div><strong>12 Monkeys</strong><em>Yes, the TV show. Don't @ me.</em></div></li>
+        <li><div><strong>Severance</strong></div></li>
+        <li><div><strong>Mr. Robot</strong></div></li>
+        <li><div><strong>Westworld S1</strong></div></li>
+        <li><div><strong>Futurama</strong></div></li>
       </ol>
       <p class="popup-note">Dark would be on this list if they didn't do the one thing they promised not to do and fuck it all up with a grandfather paradox. It was perfect until the last 20 minutes and I'm still upset about it. Yes, I'm open to debating this with anyone.</p>
     </div>
@@ -607,11 +593,11 @@
     <button class="popup-close" onclick="closePopup('boardgames')">✕ close</button>
     <div class="popup-title">Top 5 Board Games</div>
     <ol>
-      <li><span></span><div><strong>Scythe</strong></div></li>
-      <li><span></span><div><strong>The Quacks of Quedlinburg</strong></div></li>
-      <li><span></span><div><strong>Seven Wonders Duel</strong></div></li>
-      <li><span></span><div><strong>Pandemic</strong><em>I want to play the Legacy version so badly, but alas, my friends have real lives.</em></div></li>
-      <li><span></span><div><strong>Blood on the Clocktower</strong><em>Play this with strangers. It's even better.</em></div></li>
+      <li><div><strong>Scythe</strong></div></li>
+      <li><div><strong>The Quacks of Quedlinburg</strong></div></li>
+      <li><div><strong>Seven Wonders Duel</strong></div></li>
+      <li><div><strong>Pandemic</strong><em>I want to play the Legacy version so badly, but alas, my friends have real lives.</em></div></li>
+      <li><div><strong>Blood on the Clocktower</strong><em>Play this with strangers. It's even better.</em></div></li>
     </ol>
   </div>
 </div>
@@ -622,11 +608,11 @@
     <button class="popup-close" onclick="closePopup('videogames')">✕ close</button>
     <div class="popup-title">Top 5 Video Games</div>
     <ol>
-      <li><span></span><div><strong>Elden Ring</strong><em>I went in blind. Never having touched a Souls game. I am, to this day, yet to get gud.</em></div></li>
-      <li><span></span><div><strong>The Sims 2 Handheld Games</strong><em>The PSP, DS, and Gameboy versions — all named The Sims 2, all wildly different. Questing games about parallel universes in Strange Town. So far ahead of their time. Nothing has come close.</em></div></li>
-      <li><span></span><div><strong>Red Dead Redemption 2</strong><em>The horse girl awakening that got me into big boy games.</em></div></li>
-      <li><span></span><div><strong>The Witcher 3</strong></div></li>
-      <li><span></span><div><strong>Warcraft 3</strong></div></li>
+      <li><div><strong>Elden Ring</strong><em>I went in blind. Never having touched a Souls game. I am, to this day, yet to get gud.</em></div></li>
+      <li><div><strong>The Sims 2 Handheld Games</strong><em>The PSP, DS, and Gameboy versions — all named The Sims 2, all wildly different. Questing games about parallel universes in Strange Town. So far ahead of their time. Nothing has come close.</em></div></li>
+      <li><div><strong>Red Dead Redemption 2</strong><em>The horse girl awakening that got me into big boy games.</em></div></li>
+      <li><div><strong>The Witcher 3</strong></div></li>
+      <li><div><strong>Warcraft 3</strong></div></li>
     </ol>
     <p class="honorable">Honourable mention: Baldur's Gate 3. My love for D&D lives on — minus the constant scheduling issues of real life players.</p>
   </div>
