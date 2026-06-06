@@ -294,10 +294,11 @@
       display: grid;
       grid-template-columns: 1.8rem 1fr;
       gap: 0.5rem;
-      margin-bottom: 1rem;
+      margin-bottom: 1.4rem;
       font-size: 1rem;
-      line-height: 1.5;
+      line-height: 1.6;
       color: var(--text);
+      align-items: start;
     }
 
     .popup ol li::before {
@@ -305,20 +306,28 @@
       font-family: 'Space Mono', monospace;
       font-size: 0.65rem;
       color: var(--dim);
-      padding-top: 0.15em;
+      padding-top: 0.25em;
+    }
+
+    .popup ol li > div {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
     }
 
     .popup ol li strong {
       color: var(--white);
       font-weight: 500;
+      display: block;
+      line-height: 1.4;
     }
 
     .popup ol li em {
       display: block;
-      font-size: 0.88rem;
+      font-size: 0.9rem;
       color: var(--dim);
-      margin-top: 0.15em;
       font-style: italic;
+      line-height: 1.6;
     }
 
     .popup .honorable {
@@ -494,11 +503,11 @@
 
       <p>Born and living in Australia — raised, more or less, by a pack of wolves. The only thing that came from it was the darkest sense of humour I'm not afraid to share with the world.</p>
 
-      <p>Art became my world, or rather, a place to build one of my own. Somewhere to take everything that needs to be released and hone it into something beautiful, powerful, funny, sad — whatever the story needs to tell. I'm a multimedia artist who has never met an art form I didn't immediately need to try: <span class="trigger" data-popup="scalemaille">scale maille</span>, sculpture, sumi-e, printmaking, painting — even <span class="trigger" data-popup="sadgirl">sad girl writing</span>, if you dare to find it. I don't believe in specialising. The process of learning something new is the art.</p>
+      <p>Art became my world, or rather, a place to build one of my own. Somewhere to take everything that needs to be released and hone it into something beautiful, powerful, funny, sad — whatever the story needs to tell. I'm a multimedia artist who has never met an art form I didn't immediately need to try: scale maille, sculpture, sumi-e, printmaking, painting — even <span class="trigger" data-popup="sadgirl">sad girl writing</span>, if you dare to find it. I don't believe in specialising. The process of learning something new is the art.</p>
 
       <p>Fashion is how I speak when words aren't enough. It's armour, it's art, it's the first thing I reach for when I need to say something about who I am that day — soft and dangerous, delicate and defiant, and I've never wanted to choose between the two.</p>
 
-      <p>Then there's the nerd in me, which takes up considerable real estate. <span class="trigger" data-popup="scifi">sci-fi</span>, <span class="trigger" data-popup="anime">anime</span>, <span class="trigger" data-popup="boardgames">board games</span>, D&D, <span class="trigger" data-popup="videogames">video games</span> — I contain multitudes. I played WoW on and off for eight years, never well, only ever really questing. When RDR2 came out the horse girl in me wanted to ride the pretty ponies — and those pretty ponies led me to developing a love for action RPGs. RDR2 and a long-standing love for the Game of Thrones universe led me to <span class="trigger" data-popup="eldenring">Elden Ring</span>, now my favourite game. I went in completely blind, never having touched a Souls game before or really knowing what I was getting into. I am, to this day, yet to get gud.</p>
+      <p>Then there's the nerd in me, which takes up considerable real estate. <span class="trigger" data-popup="scifi">sci-fi</span>, <span class="trigger" data-popup="anime">anime</span>, <span class="trigger" data-popup="boardgames">board games</span>, <span class="trigger" data-popup="dnd">D&amp;D</span>, <span class="trigger" data-popup="videogames">video games</span> — I contain multitudes. I played WoW on and off for eight years, never well, only ever really questing. When RDR2 came out the horse girl in me wanted to ride the pretty ponies — and those pretty ponies led me to developing a love for action RPGs. RDR2 and a long-standing love for the Game of Thrones universe led me to <span class="trigger" data-popup="eldenring">Elden Ring</span>, now my favourite game. I went in completely blind, never having touched a Souls game before or really knowing what I was getting into. I am, to this day, yet to get gud.</p>
 
       <div class="divider"></div>
 
@@ -518,7 +527,7 @@
 
       <p>How do I build a business that gives away most of its services for free yet sustains itself as an income source for not only me, but others? No fucking idea yet. But one of my best talents is figuring shit out.</p>
 
-      <p>A little girl dream lives in me — to one day design and run a <span class="trigger" data-popup="scalemaille">scale maille</span> fashion show and launch custom pieces into the world. And a dream bigger than me? My work on the Met Gala stage.</p>
+      <p>A little girl dream lives in me — to one day design and run a scale maille fashion show and launch custom pieces into the world. And a dream bigger than me? My work on the Met Gala stage.</p>
 
       <span class="unfold">The fairytale is still u n f o l d i n g.</span>
     </div>
@@ -638,29 +647,27 @@
   </div>
 </div>
 
-<!-- SCALE MAILLE -->
-<div class="popup-overlay" id="popup-scalemaille">
+<!-- D&D -->
+<div class="popup-overlay" id="popup-dnd">
   <div class="popup">
-    <button class="popup-close" onclick="closePopup('scalemaille')">✕ close</button>
-    <div class="popup-title">Scale Maille</div>
+    <button class="popup-close" onclick="closePopup('dnd')">✕ close</button>
+    <div class="popup-title">D&amp;D</div>
     <div class="love-letter">
-      <p>Thousands of tiny anodised aluminium scales, woven by hand. Each piece takes weeks. Each piece is a decision about weight, light, movement, and colour made over and over until it becomes something alive.</p>
-      <p>Loretta — my scale maille dress — lives in the gallery. She is the beginning of something much larger.</p>
-      <p>The little girl dream: a scale maille fashion show, custom pieces in the world, and one day — my work on the Met Gala stage. The fairytale is still unfolding.</p>
+      <p>My go-to character is <strong style="color: var(--white);">Laura Norder</strong> — a cleric who will do everything else that the party needs, because everyone else just wants to hit stuff or throw fireballs.</p>
+      <p>Someone's gotta do damage control and keep these fuckers alive.</p>
     </div>
-    <a class="gallery-link" href="https://www.lyraswinter.art/gallery.html">View the gallery →</a>
   </div>
 </div>
+
+<!-- SCALE MAILLE (no popup - plain text, no trigger) -->
 
 <!-- SAD GIRL WRITING -->
 <div class="popup-overlay" id="popup-sadgirl">
   <div class="popup">
     <button class="popup-close" onclick="closePopup('sadgirl')">✕ close</button>
-    <div class="popup-title">Sad Girl Writing</div>
+    <div class="popup-title">&nbsp;</div>
     <div class="journal-wink">
-      <p>It exists. It's hidden. It's not for the faint of heart.</p>
-      <p>There's a door somewhere on this site. You'll know it when you find it — if you're the kind of person who looks for hidden doors.</p>
-      <p style="color: var(--dim); font-size: 0.9rem; margin-top: 1.2rem;">( Look closer. )</p>
+      <p style="color: var(--dim); font-size: 0.9rem; letter-spacing: 0.08em;">. . .</p>
     </div>
   </div>
 </div>
