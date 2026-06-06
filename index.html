@@ -653,8 +653,8 @@
     main.style.opacity = '1';
     main.style.animation = 'none';
   } else {
-    // First visit — play glitch, then mark as visited
-    sessionStorage.setItem('visited', 'true');
+    // First visit — play glitch, mark visited AFTER intro finishes
+    setTimeout(() => sessionStorage.setItem('visited', 'true'), 3700);
   }
 
   // ── SECRET REVEAL — Winter's Journal ──
@@ -843,7 +843,9 @@
     if (!el) return;
     const text = 'artist · model · streamer';
     let i = 0;
-    const delay = sessionStorage.getItem('visited') ? 300 : 5500;
+    const isFirstVisit = !sessionStorage.getItem('typed');
+    sessionStorage.setItem('typed', 'true');
+    const delay = isFirstVisit ? 5500 : 300;
     setTimeout(function type() {
       if (i <= text.length) {
         el.textContent = text.slice(0, i);
