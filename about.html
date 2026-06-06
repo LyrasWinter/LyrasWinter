@@ -1,0 +1,724 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About — Lyra Winter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --pink: #e8a0b4;
+      --black: #080808;
+      --text: #c8a0b0;
+      --dim: #5a3545;
+      --white: #f0e8ec;
+      --bg: #0d080b;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 18px;
+      line-height: 1.75;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 2.5rem;
+      background: linear-gradient(to bottom, rgba(8,8,8,0.95) 0%, transparent 100%);
+    }
+
+    .nav-logo img {
+      height: 36px;
+      opacity: 0.92;
+      transition: opacity 0.3s;
+    }
+    .nav-logo img:hover { opacity: 1; }
+
+    .nav-hamburger {
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      padding: 4px;
+    }
+    .nav-hamburger span {
+      display: block;
+      width: 24px;
+      height: 1px;
+      background: var(--pink);
+      transition: all 0.3s;
+    }
+
+    .nav-menu {
+      position: fixed;
+      top: 0; right: -100%;
+      width: min(320px, 80vw);
+      height: 100vh;
+      background: rgba(8,8,8,0.97);
+      border-left: 1px solid var(--dim);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 3rem;
+      gap: 2.5rem;
+      transition: right 0.4s cubic-bezier(0.77,0,0.175,1);
+      z-index: 200;
+    }
+    .nav-menu.open { right: 0; }
+
+    .nav-menu a {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--text);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-menu a:hover { color: var(--pink); }
+
+    .nav-close {
+      position: absolute;
+      top: 1.5rem; right: 1.5rem;
+      background: none;
+      border: none;
+      color: var(--dim);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .nav-close:hover { color: var(--pink); }
+
+    .nav-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.6);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s;
+      z-index: 150;
+    }
+    .nav-overlay.open { opacity: 1; pointer-events: all; }
+
+    /* ── LAYOUT ── */
+    .page-split {
+      display: grid;
+      grid-template-columns: 45vw 1fr;
+      min-height: 100vh;
+    }
+
+    /* ── ART PANEL ── */
+    .art-panel {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    .art-panel img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      display: block;
+      filter: saturate(1.05) contrast(1.02);
+    }
+
+    .art-panel::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, transparent 70%, var(--bg) 100%),
+                  linear-gradient(to bottom, rgba(8,8,8,0.3) 0%, transparent 20%);
+      pointer-events: none;
+    }
+
+    .art-credit {
+      position: absolute;
+      bottom: 1.5rem;
+      left: 1.5rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      color: var(--dim);
+      text-transform: uppercase;
+      z-index: 2;
+    }
+
+    /* ── CONTENT PANEL ── */
+    .content-panel {
+      padding: 8rem 4rem 6rem 3rem;
+      max-width: 680px;
+    }
+
+    /* ── OPENER ── */
+    .opener {
+      margin-bottom: 4rem;
+    }
+
+    .opener p {
+      font-size: 1.2rem;
+      font-style: italic;
+      color: var(--text);
+      line-height: 1.8;
+      margin-bottom: 1em;
+    }
+
+    .opener .pull {
+      font-size: 1.05rem;
+      font-weight: 300;
+      color: var(--dim);
+      font-style: italic;
+    }
+
+    /* ── SECTION HEADERS ── */
+    .section-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--pink);
+      margin-bottom: 1.2rem;
+      margin-top: 3.5rem;
+      display: block;
+    }
+
+    .section-label:first-child { margin-top: 0; }
+
+    /* ── BIO TEXT ── */
+    .bio-section p {
+      margin-bottom: 1.2em;
+      color: var(--text);
+      font-size: 1.05rem;
+      line-height: 1.85;
+    }
+
+    /* ── INTERACTIVE WORDS ── */
+    .trigger {
+      color: var(--pink);
+      cursor: pointer;
+      border-bottom: 1px solid var(--dim);
+      transition: color 0.2s, border-color 0.2s;
+      position: relative;
+      white-space: nowrap;
+    }
+    .trigger:hover {
+      color: var(--white);
+      border-color: var(--pink);
+    }
+    .trigger.active {
+      color: var(--white);
+      border-color: var(--pink);
+    }
+
+    /* ── POPUP PANELS ── */
+    .popup-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 300;
+      align-items: center;
+      justify-content: center;
+      background: rgba(8,8,8,0.85);
+      backdrop-filter: blur(4px);
+    }
+    .popup-overlay.open { display: flex; }
+
+    .popup {
+      background: #110a0e;
+      border: 1px solid var(--dim);
+      max-width: 520px;
+      width: 90vw;
+      max-height: 80vh;
+      overflow-y: auto;
+      padding: 2.5rem;
+      position: relative;
+      animation: popIn 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: translateY(12px) scale(0.97); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    .popup-close {
+      position: absolute;
+      top: 1rem; right: 1rem;
+      background: none;
+      border: none;
+      color: var(--dim);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .popup-close:hover { color: var(--pink); }
+
+    .popup-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--pink);
+      margin-bottom: 1.5rem;
+    }
+
+    .popup ol {
+      list-style: none;
+      counter-reset: popup-counter;
+    }
+
+    .popup ol li {
+      counter-increment: popup-counter;
+      display: grid;
+      grid-template-columns: 1.8rem 1fr;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+      line-height: 1.5;
+      color: var(--text);
+    }
+
+    .popup ol li::before {
+      content: counter(popup-counter);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--dim);
+      padding-top: 0.15em;
+    }
+
+    .popup ol li strong {
+      color: var(--white);
+      font-weight: 500;
+    }
+
+    .popup ol li em {
+      display: block;
+      font-size: 0.88rem;
+      color: var(--dim);
+      margin-top: 0.15em;
+      font-style: italic;
+    }
+
+    .popup .honorable {
+      margin-top: 1.5rem;
+      padding-top: 1.2rem;
+      border-top: 1px solid #1e1018;
+      font-size: 0.9rem;
+      color: var(--dim);
+      font-style: italic;
+    }
+
+    .popup .popup-note {
+      margin-top: 1.2rem;
+      font-size: 0.9rem;
+      color: var(--dim);
+      font-style: italic;
+      line-height: 1.6;
+    }
+
+    /* love letter style */
+    .popup .love-letter {
+      font-style: italic;
+      font-size: 1rem;
+      line-height: 1.8;
+      color: var(--text);
+    }
+    .popup .love-letter p { margin-bottom: 0.8em; }
+
+    /* gallery link */
+    .popup .gallery-link {
+      display: inline-block;
+      margin-top: 1rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--pink);
+      text-decoration: none;
+      border-bottom: 1px solid var(--dim);
+      transition: border-color 0.2s;
+    }
+    .popup .gallery-link:hover { border-color: var(--pink); }
+
+    /* journal wink */
+    .popup .journal-wink {
+      font-style: italic;
+      font-size: 1.05rem;
+      color: var(--text);
+      line-height: 1.8;
+    }
+
+    /* sci-fi tabs */
+    .popup-tabs {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid #1e1018;
+      padding-bottom: 0.8rem;
+    }
+    .tab-btn {
+      background: none;
+      border: none;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--dim);
+      cursor: pointer;
+      padding-bottom: 0.4rem;
+      transition: color 0.2s;
+      border-bottom: 1px solid transparent;
+      margin-bottom: -0.9rem;
+    }
+    .tab-btn.active { color: var(--pink); border-bottom-color: var(--pink); }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    /* ── CLOSING LINE ── */
+    .unfold {
+      display: block;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.4em;
+      color: var(--dim);
+      margin-top: 3rem;
+      text-transform: lowercase;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      width: 40px;
+      height: 1px;
+      background: var(--dim);
+      margin: 3rem 0;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 3rem 4rem 3rem 3rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.15em;
+      color: var(--dim);
+      text-transform: uppercase;
+    }
+
+    /* ── MOBILE ── */
+    @media (max-width: 768px) {
+      .page-split {
+        grid-template-columns: 1fr;
+      }
+      .art-panel {
+        position: relative;
+        height: 70vw;
+        min-height: 320px;
+      }
+      .art-panel::after {
+        background: linear-gradient(to bottom, transparent 60%, var(--bg) 100%);
+      }
+      .content-panel {
+        padding: 3rem 1.5rem 4rem;
+        max-width: 100%;
+      }
+      nav { padding: 1rem 1.5rem; }
+      footer { padding: 2rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="https://www.lyraswinter.art/index.html">
+    <img src="https://www.lyraswinter.art/Logo_No_Background_Vector.svg" alt="Lyra Winter" />
+  </a>
+  <button class="nav-hamburger" onclick="openNav()" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<div class="nav-overlay" id="navOverlay" onclick="closeNav()"></div>
+<div class="nav-menu" id="navMenu">
+  <button class="nav-close" onclick="closeNav()">✕ close</button>
+  <a href="https://www.lyraswinter.art/index.html">Home</a>
+  <a href="https://www.lyraswinter.art/modelling.html">Modelling</a>
+  <a href="https://www.lyraswinter.art/gallery.html">Gallery</a>
+  <a href="https://www.lyraswinter.art/sales.html">Art Sales</a>
+  <a href="about.html">About</a>
+</div>
+
+<!-- MAIN -->
+<div class="page-split">
+
+  <!-- ART -->
+  <div class="art-panel">
+    <img src="LyraSoulStealer__Rhi_Art.png" alt="Lyra Winter — artwork by Rhi" />
+    <span class="art-credit">Art by Rhi</span>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content-panel">
+
+    <div class="opener">
+      <p>Whenever life takes me somewhere new — a place yet to be explored — I'll start my journey where most would. Amongst the crowd, the first spawn point on the map, page one. The beginning of whatever story is about to unfold.</p>
+      <p class="pull">But I'm not interested in the stories that have been told.</p>
+      <p>I want to know about the gloomy path everyone averts their eyes from. What's behind the hidden door. What lies within the cover if you take a scalpel so gently to the edge of its paper. I want to know everything this world has to offer.</p>
+      <p>It'll probably be the death of me.</p>
+    </div>
+
+    <div class="bio-section">
+
+      <span class="section-label">Who is Lyra's Winter?</span>
+
+      <p>Born and living in Australia — raised, more or less, by a pack of wolves. The only thing that came from it was the darkest sense of humour I'm not afraid to share with the world.</p>
+
+      <p>Art became my world, or rather, a place to build one of my own. Somewhere to take everything that needs to be released and hone it into something beautiful, powerful, funny, sad — whatever the story needs to tell. I'm a multimedia artist who has never met an art form I didn't immediately need to try: <span class="trigger" data-popup="scalemaille">scale maille</span>, sculpture, sumi-e, printmaking, painting — even <span class="trigger" data-popup="sadgirl">sad girl writing</span>, if you dare to find it. I don't believe in specialising. The process of learning something new is the art.</p>
+
+      <p>Fashion is how I speak when words aren't enough. It's armour, it's art, it's the first thing I reach for when I need to say something about who I am that day — soft and dangerous, delicate and defiant, and I've never wanted to choose between the two.</p>
+
+      <p>Then there's the nerd in me, which takes up considerable real estate. <span class="trigger" data-popup="scifi">sci-fi</span>, <span class="trigger" data-popup="anime">anime</span>, <span class="trigger" data-popup="boardgames">board games</span>, D&D, <span class="trigger" data-popup="videogames">video games</span> — I contain multitudes. I played WoW on and off for eight years, never well, only ever really questing. When RDR2 came out the horse girl in me wanted to ride the pretty ponies — and those pretty ponies led me to developing a love for action RPGs. RDR2 and a long-standing love for the Game of Thrones universe led me to <span class="trigger" data-popup="eldenring">Elden Ring</span>, now my favourite game. I went in completely blind, never having touched a Souls game before or really knowing what I was getting into. I am, to this day, yet to get gud.</p>
+
+      <div class="divider"></div>
+
+      <span class="section-label">What is Lyra's Winter?</span>
+
+      <p>It's a world. My world. Named for me — but built for everyone.</p>
+      <p>Even when it's cold, you find the beauty in it. Even when things are dark, if you choose happiness, it's there. I want to create a space that is pure joy — community, kindness, humour, and the occasional piece of art that makes you feel something you weren't expecting.</p>
+      <p>We're in a rough world right now. I think we all need a laugh more than anything.</p>
+
+      <div class="divider"></div>
+
+      <span class="section-label">Lyra's Winter — The Mission</span>
+
+      <p>I want to create something that gives back more than it takes. To build something big enough to employ the people who kept me afloat through my hardest times. To make digital content that's completely free — because I don't want to live in a world where everything is monetised, where you are constantly a product.</p>
+
+      <p>I once overheard someone in a café say <em>"what if we all just gave 10% more than we took — imagine the world we'd live in."</em> I want to live in that world. The only way to get there is to lead a life that reflects those values.</p>
+
+      <p>How do I build a business that gives away most of its services for free yet sustains itself as an income source for not only me, but others? No fucking idea yet. But one of my best talents is figuring shit out.</p>
+
+      <p>A little girl dream lives in me — to one day design and run a <span class="trigger" data-popup="scalemaille">scale maille</span> fashion show and launch custom pieces into the world. And a dream bigger than me? My work on the Met Gala stage.</p>
+
+      <span class="unfold">The fairytale is still u n f o l d i n g.</span>
+    </div>
+
+    <footer>© 2026 Lyra's Winter</footer>
+  </div>
+</div>
+
+
+<!-- ═══════════════ POPUPS ═══════════════ -->
+
+<!-- ANIME -->
+<div class="popup-overlay" id="popup-anime">
+  <div class="popup">
+    <button class="popup-close" onclick="closePopup('anime')">✕ close</button>
+    <div class="popup-title">Top 5 Anime</div>
+    <ol>
+      <li>
+        <span></span>
+        <div><strong>A Silent Voice</strong><em>Yes, I like hurting myself. One of the most powerful films — not just anime — to ever exist. Anime fan or not, everyone should watch this.</em></div>
+      </li>
+      <li>
+        <span></span>
+        <div><strong>Psycho-Pass</strong></div>
+      </li>
+      <li>
+        <span></span>
+        <div><strong>Demon Slayer</strong></div>
+      </li>
+      <li>
+        <span></span>
+        <div><strong>Apothecary Diaries</strong></div>
+      </li>
+      <li>
+        <span></span>
+        <div><strong>Horimiya</strong></div>
+      </li>
+    </ol>
+    <p class="honorable">Favourite Ghibli: Howl's Moving Castle. Obviously.</p>
+  </div>
+</div>
+
+<!-- SCI-FI -->
+<div class="popup-overlay" id="popup-scifi">
+  <div class="popup">
+    <button class="popup-close" onclick="closePopup('scifi')">✕ close</button>
+    <div class="popup-title">Top Sci-Fi</div>
+    <div class="popup-tabs">
+      <button class="tab-btn active" onclick="switchTab(this, 'scifi-films')">Films</button>
+      <button class="tab-btn" onclick="switchTab(this, 'scifi-tv')">TV Shows</button>
+    </div>
+    <div class="tab-content active" id="scifi-films">
+      <ol>
+        <li><span></span><div><strong>Arrival</strong><em>Hands down the best masterpiece of my life. My favourite film of all time. Full stop.</em></div></li>
+        <li><span></span><div><strong>The Fifth Element</strong></div></li>
+        <li><span></span><div><strong>Interstellar</strong></div></li>
+        <li><span></span><div><strong>Ex Machina</strong></div></li>
+        <li><span></span><div><strong>Blade Runner</strong></div></li>
+      </ol>
+    </div>
+    <div class="tab-content" id="scifi-tv">
+      <ol>
+        <li><span></span><div><strong>12 Monkeys</strong><em>Yes, the TV show. Don't @ me.</em></div></li>
+        <li><span></span><div><strong>Severance</strong></div></li>
+        <li><span></span><div><strong>Mr. Robot</strong></div></li>
+        <li><span></span><div><strong>Westworld S1</strong></div></li>
+        <li><span></span><div><strong>Futurama</strong></div></li>
+      </ol>
+      <p class="popup-note">Dark would be on this list if they didn't do the one thing they promised not to do and fuck it all up with a grandfather paradox. It was perfect until the last 20 minutes and I'm still upset about it. Yes, I'm open to debating this with anyone.</p>
+    </div>
+  </div>
+</div>
+
+<!-- BOARD GAMES -->
+<div class="popup-overlay" id="popup-boardgames">
+  <div class="popup">
+    <button class="popup-close" onclick="closePopup('boardgames')">✕ close</button>
+    <div class="popup-title">Top 5 Board Games</div>
+    <ol>
+      <li><span></span><div><strong>Scythe</strong></div></li>
+      <li><span></span><div><strong>The Quacks of Quedlinburg</strong></div></li>
+      <li><span></span><div><strong>Seven Wonders Duel</strong></div></li>
+      <li><span></span><div><strong>Pandemic</strong><em>I want to play the Legacy version so badly, but alas, my friends have real lives.</em></div></li>
+      <li><span></span><div><strong>Blood on the Clocktower</strong><em>Play this with strangers. It's even better.</em></div></li>
+    </ol>
+  </div>
+</div>
+
+<!-- VIDEO GAMES -->
+<div class="popup-overlay" id="popup-videogames">
+  <div class="popup">
+    <button class="popup-close" onclick="closePopup('videogames')">✕ close</button>
+    <div class="popup-title">Top 5 Video Games</div>
+    <ol>
+      <li><span></span><div><strong>Elden Ring</strong><em>I went in blind. Never having touched a Souls game. I am, to this day, yet to get gud.</em></div></li>
+      <li><span></span><div><strong>The Sims 2 Handheld Games</strong><em>The PSP, DS, and Gameboy versions — all named The Sims 2, all wildly different. Questing games about parallel universes in Strange Town. So far ahead of their time. Nothing has come close.</em></div></li>
+      <li><span></span><div><strong>Red Dead Redemption 2</strong><em>The horse girl awakening that got me into big boy games.</em></div></li>
+      <li><span></span><div><strong>The Witcher 3</strong></div></li>
+      <li><span></span><div><strong>Warcraft 3</strong></div></li>
+    </ol>
+    <p class="honorable">Honourable mention: Baldur's Gate 3. My love for D&D lives on — minus the constant scheduling issues of real life players.</p>
+  </div>
+</div>
+
+<!-- ELDEN RING -->
+<div class="popup-overlay" id="popup-eldenring">
+  <div class="popup">
+    <button class="popup-close" onclick="closePopup('eldenring')">✕ close</button>
+    <div class="popup-title">A Love Letter to Elden Ring</div>
+    <div class="love-letter">
+      <p>I went in completely blind. No lore. No wiki. No idea what I was getting into — only that RDR2 had broken something open in me and the Game of Thrones universe had wrecked me for anything less than beautiful, brutal, unforgiving worlds.</p>
+      <p>Elden Ring handed me both, and then some.</p>
+      <p>I died approximately ten thousand times. I read item descriptions like scripture. I talked to NPCs until they ran out of things to say and then talked to them again. I explored every corner of the map before it was time to move on, because leaving felt like grief.</p>
+      <p>I am, to this day, yet to get gud. And I don't care even a little bit.</p>
+      <p>It is my favourite game. It is the standard everything else is now measured against. It is the reason I stream.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SCALE MAILLE -->
+<div class="popup-overlay" id="popup-scalemaille">
+  <div class="popup">
+    <button class="popup-close" onclick="closePopup('scalemaille')">✕ close</button>
+    <div class="popup-title">Scale Maille</div>
+    <div class="love-letter">
+      <p>Thousands of tiny anodised aluminium scales, woven by hand. Each piece takes weeks. Each piece is a decision about weight, light, movement, and colour made over and over until it becomes something alive.</p>
+      <p>Loretta — my scale maille dress — lives in the gallery. She is the beginning of something much larger.</p>
+      <p>The little girl dream: a scale maille fashion show, custom pieces in the world, and one day — my work on the Met Gala stage. The fairytale is still unfolding.</p>
+    </div>
+    <a class="gallery-link" href="https://www.lyraswinter.art/gallery.html">View the gallery →</a>
+  </div>
+</div>
+
+<!-- SAD GIRL WRITING -->
+<div class="popup-overlay" id="popup-sadgirl">
+  <div class="popup">
+    <button class="popup-close" onclick="closePopup('sadgirl')">✕ close</button>
+    <div class="popup-title">Sad Girl Writing</div>
+    <div class="journal-wink">
+      <p>It exists. It's hidden. It's not for the faint of heart.</p>
+      <p>There's a door somewhere on this site. You'll know it when you find it — if you're the kind of person who looks for hidden doors.</p>
+      <p style="color: var(--dim); font-size: 0.9rem; margin-top: 1.2rem;">( Look closer. )</p>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  // NAV
+  function openNav() {
+    document.getElementById('navMenu').classList.add('open');
+    document.getElementById('navOverlay').classList.add('open');
+  }
+  function closeNav() {
+    document.getElementById('navMenu').classList.remove('open');
+    document.getElementById('navOverlay').classList.remove('open');
+  }
+
+  // POPUPS
+  document.querySelectorAll('.trigger').forEach(el => {
+    el.addEventListener('click', () => {
+      const id = el.dataset.popup;
+      document.getElementById('popup-' + id).classList.add('open');
+      el.classList.add('active');
+    });
+  });
+
+  function closePopup(id) {
+    document.getElementById('popup-' + id).classList.remove('open');
+    document.querySelectorAll(`[data-popup="${id}"]`).forEach(el => el.classList.remove('active'));
+  }
+
+  // Close on overlay click
+  document.querySelectorAll('.popup-overlay').forEach(overlay => {
+    overlay.addEventListener('click', e => {
+      if (e.target === overlay) {
+        const id = overlay.id.replace('popup-', '');
+        closePopup(id);
+      }
+    });
+  });
+
+  // Escape key
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.popup-overlay.open').forEach(el => {
+        const id = el.id.replace('popup-', '');
+        closePopup(id);
+      });
+      closeNav();
+    }
+  });
+
+  // SCI-FI TABS
+  function switchTab(btn, contentId) {
+    btn.closest('.popup').querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.closest('.popup').querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(contentId).classList.add('active');
+  }
+</script>
+</body>
+</html>
