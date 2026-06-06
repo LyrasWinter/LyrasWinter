@@ -32,7 +32,7 @@
     }
 
     /* ── NAV ── */
-    nav {
+    .lw-nav {
       position: fixed;
       top: 0; left: 0; right: 0;
       z-index: 100;
@@ -41,33 +41,41 @@
       justify-content: space-between;
       padding: 1.2rem 2.5rem;
       background: linear-gradient(to bottom, rgba(8,8,8,0.95) 0%, transparent 100%);
+      pointer-events: none;
     }
+    .lw-nav > * { pointer-events: all; }
 
-    .nav-logo img {
+    .lw-nav-logo img {
       height: 36px;
       opacity: 0.92;
       transition: opacity 0.3s;
+      display: block;
     }
-    .nav-logo img:hover { opacity: 1; }
+    .lw-nav-logo img:hover { opacity: 1; }
 
-    .nav-hamburger {
+    .lw-hamburger {
       background: none;
       border: none;
       cursor: pointer;
       display: flex;
       flex-direction: column;
       gap: 5px;
-      padding: 4px;
+      padding: 6px;
+      z-index: 201;
     }
-    .nav-hamburger span {
+    .lw-hamburger span {
       display: block;
       width: 24px;
       height: 1px;
       background: var(--pink);
-      transition: all 0.3s;
+      transition: transform 0.35s cubic-bezier(0.77,0,0.175,1), opacity 0.2s;
+      transform-origin: center;
     }
+    .lw-hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+    .lw-hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+    .lw-hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
 
-    .nav-menu {
+    .lw-nav-menu {
       position: fixed;
       top: 0; right: -100%;
       width: min(320px, 80vw);
@@ -82,43 +90,92 @@
       transition: right 0.4s cubic-bezier(0.77,0,0.175,1);
       z-index: 200;
     }
-    .nav-menu.open { right: 0; }
+    .lw-nav-menu.open { right: 0; }
 
-    .nav-menu a {
+    .lw-nav-menu a {
       font-family: 'Space Mono', monospace;
       font-size: 0.75rem;
       letter-spacing: 0.18em;
       text-transform: uppercase;
       color: var(--text);
       text-decoration: none;
-      transition: color 0.2s;
+      position: relative;
+      display: inline-block;
+      transition: color 0.15s;
     }
-    .nav-menu a:hover { color: var(--pink); }
+    .lw-nav-menu a::before,
+    .lw-nav-menu a::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      opacity: 0;
+      pointer-events: none;
+    }
+    .lw-nav-menu a::before {
+      color: var(--pink);
+      clip-path: polygon(0 20%, 100% 20%, 100% 40%, 0 40%);
+    }
+    .lw-nav-menu a::after {
+      color: #b0d0e8;
+      clip-path: polygon(0 60%, 100% 60%, 100% 80%, 0 80%);
+    }
+    .lw-nav-menu a:hover { color: var(--white); }
+    .lw-nav-menu a:hover::before {
+      opacity: 0.85;
+      animation: glitch-top 0.3s steps(1) infinite;
+    }
+    .lw-nav-menu a:hover::after {
+      opacity: 0.7;
+      animation: glitch-bot 0.3s steps(1) infinite;
+    }
+    .lw-nav-menu a.active { color: var(--pink); }
 
-    .nav-close {
+    .lw-nav-menu .nav-divider {
+      width: 30px;
+      height: 1px;
+      background: #2e1a24;
+    }
+
+    @keyframes glitch-top {
+      0%   { transform: translate(-2px, -1px); }
+      25%  { transform: translate(2px, 0); }
+      50%  { transform: translate(-1px, 1px); }
+      75%  { transform: translate(1px, -1px); }
+      100% { transform: translate(-2px, 0); }
+    }
+    @keyframes glitch-bot {
+      0%   { transform: translate(2px, 1px); }
+      25%  { transform: translate(-2px, 0); }
+      50%  { transform: translate(1px, -1px); }
+      75%  { transform: translate(-1px, 1px); }
+      100% { transform: translate(2px, 0); }
+    }
+
+    .lw-nav-close {
       position: absolute;
       top: 1.5rem; right: 1.5rem;
       background: none;
       border: none;
       color: var(--dim);
       font-family: 'Space Mono', monospace;
-      font-size: 0.75rem;
-      letter-spacing: 0.1em;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
       cursor: pointer;
       transition: color 0.2s;
     }
-    .nav-close:hover { color: var(--pink); }
+    .lw-nav-close:hover { color: var(--pink); }
 
-    .nav-overlay {
+    .lw-nav-overlay {
       position: fixed;
       inset: 0;
-      background: rgba(0,0,0,0.6);
+      background: rgba(0,0,0,0.55);
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.4s;
       z-index: 150;
     }
-    .nav-overlay.open { opacity: 1; pointer-events: all; }
+    .lw-nav-overlay.open { opacity: 1; pointer-events: all; }
 
     /* ── LAYOUT ── */
     .page-split {
@@ -160,7 +217,7 @@
       font-family: 'Space Mono', monospace;
       font-size: 0.6rem;
       letter-spacing: 0.15em;
-      color: var(--dim);
+      color: #2e1a24;
       text-transform: uppercase;
       z-index: 2;
     }
@@ -443,7 +500,7 @@
         padding: 3rem 1.5rem 4rem;
         max-width: 100%;
       }
-      nav { padding: 1rem 1.5rem; }
+      .lw-nav { padding: 1rem 1.5rem; }
       footer { padding: 2rem 1.5rem; }
     }
   </style>
@@ -451,22 +508,25 @@
 <body>
 
 <!-- NAV -->
-<nav>
-  <a class="nav-logo" href="https://www.lyraswinter.art/index.html">
+<nav class="lw-nav">
+  <a class="lw-nav-logo" href="https://www.lyraswinter.art/index.html">
     <img src="https://www.lyraswinter.art/Logo_No_Background_Vector.svg" alt="Lyra Winter" />
   </a>
-  <button class="nav-hamburger" onclick="openNav()" aria-label="Open menu">
+  <button class="lw-hamburger" id="lwHamburger" onclick="lwOpenNav()" aria-label="Open menu">
+    <span></span><span></span><span></span>
   </button>
 </nav>
 
-<div class="nav-overlay" id="navOverlay" onclick="closeNav()"></div>
-<div class="nav-menu" id="navMenu">
-  <button class="nav-close" onclick="closeNav()">✕ close</button>
-  <a href="https://www.lyraswinter.art/index.html">Home</a>
-  <a href="https://www.lyraswinter.art/modelling.html">Modelling</a>
-  <a href="https://www.lyraswinter.art/gallery.html">Gallery</a>
-  <a href="https://www.lyraswinter.art/sales.html">Art Sales</a>
-  <a href="about.html">About</a>
+<div class="lw-nav-overlay" id="lwOverlay" onclick="lwCloseNav()"></div>
+<div class="lw-nav-menu" id="lwNavMenu">
+  <button class="lw-nav-close" onclick="lwCloseNav()">✕ close</button>
+  <a href="https://www.lyraswinter.art/index.html"     data-text="Home">Home</a>
+  <a href="https://www.lyraswinter.art/modelling.html" data-text="Modelling">Modelling</a>
+  <a href="https://www.lyraswinter.art/gallery.html"   data-text="Gallery">Gallery</a>
+  <a href="https://www.lyraswinter.art/sales.html"     data-text="Art Sales">Art Sales</a>
+  <a href="about.html" class="active"                  data-text="About">About</a>
+  <div class="nav-divider"></div>
+  <a href="mailto:lyraswinter@proton.me"               data-text="Email">Email</a>
 </div>
 
 <!-- MAIN -->
@@ -475,7 +535,7 @@
   <!-- ART -->
   <div class="art-panel">
     <img src="LyraSoulStealer__Rhi_Art.png" alt="Lyra Winter — artwork by Rhi" />
-    <span class="art-credit">Art by Rhi</span>
+    <span class="art-credit">Art by Rhiannon Roderick</span>
   </div>
 
   <!-- CONTENT -->
@@ -661,13 +721,17 @@
 
 <script>
   // NAV
-  function openNav() {
-    document.getElementById('navMenu').classList.add('open');
-    document.getElementById('navOverlay').classList.add('open');
+  function lwOpenNav() {
+    document.getElementById('lwNavMenu').classList.add('open');
+    document.getElementById('lwOverlay').classList.add('open');
+    document.getElementById('lwHamburger').classList.add('open');
+    document.body.style.overflow = 'hidden';
   }
-  function closeNav() {
-    document.getElementById('navMenu').classList.remove('open');
-    document.getElementById('navOverlay').classList.remove('open');
+  function lwCloseNav() {
+    document.getElementById('lwNavMenu').classList.remove('open');
+    document.getElementById('lwOverlay').classList.remove('open');
+    document.getElementById('lwHamburger').classList.remove('open');
+    document.body.style.overflow = '';
   }
 
   // POPUPS
@@ -701,7 +765,7 @@
         const id = el.id.replace('popup-', '');
         closePopup(id);
       });
-      closeNav();
+      lwCloseNav();
     }
   });
 
