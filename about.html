@@ -499,6 +499,50 @@
       footer { padding: 2rem 1.5rem; }
       .unfold-word { display: block; white-space: nowrap; }
     }
+  /* ── MANIFESTO LINK ── */
+  .manifesto-link {
+    display: block;
+    margin-top: 2.4rem;
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    color: var(--dim);
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: color 0.2s;
+    cursor: pointer;
+    background: none; border: none; padding: 0;
+    font-family: 'Space Mono', monospace;
+  }
+  .manifesto-link:hover { color: var(--pink); }
+
+  /* ── MANIFESTO LIGHTBOX ── */
+  #manifesto-lightbox {
+    display: none;
+    position: fixed; inset: 0; z-index: 800;
+    background: rgba(8,8,8,0.92);
+    backdrop-filter: blur(6px);
+    overflow-y: auto;
+  }
+  #manifesto-lightbox.open { display: block; }
+
+  #manifesto-close {
+    position: fixed;
+    top: 20px; left: 24px;
+    z-index: 900;
+    background: none; border: none;
+    font-family: 'Space Mono', monospace;
+    font-size: 9px; letter-spacing: 0.25em;
+    color: var(--dim); text-transform: uppercase;
+    cursor: pointer; padding: 8px 0;
+    transition: color 0.2s;
+  }
+  #manifesto-close:hover { color: var(--pink); }
+
+  #manifesto-frame {
+    width: 100%; min-height: 100%;
+    border: none; display: block;
+  }
+
   </style>
 </head>
 <body>
@@ -574,6 +618,8 @@
       <p>A little girl dream lives in me — to one day design and run a scale maille fashion show and launch custom pieces into the world. And a <span class="trigger" data-popup="dreams">dream bigger than me</span>? I have a few.</p>
 
       <span class="unfold">The fairytale is still <span class="unfold-word">u n f o l d i n g.</span></span>
+
+      <button class="manifesto-link" onclick="openManifesto()">↗ brand manifesto</button>
     </div>
 
     <footer>© 2026 Lyra's Winter &nbsp;·&nbsp; 8 / 6 / 2026</footer>
@@ -773,5 +819,34 @@
     document.getElementById(contentId).classList.add('active');
   }
 </script>
+<!-- ── MANIFESTO LIGHTBOX ── -->
+<div id="manifesto-lightbox">
+  <button id="manifesto-close" onclick="closeManifesto()">← close</button>
+  <iframe id="manifesto-frame" src="manifesto.html" title="Brand Manifesto"></iframe>
+</div>
+
+<script>
+  function openManifesto() {
+    const lb = document.getElementById('manifesto-lightbox');
+    lb.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    history.pushState({ manifesto: true }, '');
+  }
+
+  function closeManifesto() {
+    const lb = document.getElementById('manifesto-lightbox');
+    lb.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  window.addEventListener('popstate', function() {
+    closeManifesto();
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeManifesto();
+  });
+</script>
+
 </body>
 </html>

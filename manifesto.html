@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manifesto — Lyra's Winter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --pink: #e8a0b4;
+    --pink-hot: #d4607a;
+    --black: #080808;
+    --text: #c8a0b0;
+    --dim: #5a3545;
+    --white: #f0e8ec;
+  }
+
+  html, body {
+    background: var(--black);
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    overflow-x: hidden;
+  }
+
+  body::after {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.07) 2px, rgba(0,0,0,0.07) 4px);
+    pointer-events: none;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 18px 40px;
+    display: flex; align-items: center; justify-content: space-between;
+    background: linear-gradient(to bottom, rgba(8,8,8,0.95) 0%, transparent 100%);
+  }
+
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px; font-weight: 300;
+    letter-spacing: 0.2em; color: var(--pink);
+    text-decoration: none; text-transform: uppercase;
+  }
+
+  /* ── LAYOUT ── */
+  .page {
+    position: relative; z-index: 1;
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 140px 40px 120px;
+  }
+
+  /* ── HEADER ── */
+  .manifesto-label {
+    font-size: 9px; letter-spacing: 0.4em;
+    color: var(--dim); text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  .manifesto-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300; font-style: italic;
+    font-size: clamp(36px, 6vw, 68px);
+    line-height: 1.1; letter-spacing: 0.04em;
+    color: var(--white);
+    margin-bottom: 60px;
+  }
+
+  .manifesto-title em {
+    color: var(--pink);
+    font-style: normal;
+  }
+
+  /* ── RULE ── */
+  .rule {
+    width: 40px; height: 1px;
+    background: var(--dim);
+    margin-bottom: 60px;
+  }
+
+  /* ── BODY TEXT ── */
+  .manifesto-body p {
+    font-size: 13px;
+    line-height: 2;
+    letter-spacing: 0.04em;
+    color: var(--text);
+    margin-bottom: 2em;
+  }
+
+  .manifesto-body p.lead {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 300;
+    font-size: clamp(18px, 2.8vw, 26px);
+    line-height: 1.6;
+    color: var(--white);
+    font-style: italic;
+    margin-bottom: 2.4em;
+  }
+
+  .manifesto-body strong {
+    color: var(--pink);
+    font-weight: 400;
+  }
+
+  /* ── SECTION HEADERS ── */
+  .section-marker {
+    display: flex; align-items: center; gap: 16px;
+    margin: 64px 0 28px;
+  }
+
+  .section-marker span {
+    font-size: 8px; letter-spacing: 0.35em;
+    color: var(--dim); text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .section-marker::after {
+    content: '';
+    flex: 1; height: 1px;
+    background: var(--dim); opacity: 0.3;
+  }
+
+  /* ── PILLARS ── */
+  .pillars {
+    margin: 48px 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+  }
+
+  .pillar {
+    padding: 28px 24px;
+    border: 1px solid rgba(90,53,69,0.3);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pillar::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 2px; background: var(--pink-hot);
+    transform: scaleY(0); transform-origin: bottom;
+    transition: transform 0.3s ease;
+  }
+
+  .pillar:hover::before { transform: scaleY(1); }
+
+  .pillar-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px; font-weight: 300;
+    color: var(--white); letter-spacing: 0.08em;
+    margin-bottom: 10px;
+  }
+
+  .pillar-note {
+    font-size: 10px; letter-spacing: 0.06em;
+    color: var(--dim); line-height: 1.8;
+  }
+
+  /* ── COMMITMENTS ── */
+  .commitments {
+    margin: 48px 0;
+    list-style: none;
+  }
+
+  .commitments li {
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(90,53,69,0.2);
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 20px;
+    align-items: start;
+  }
+
+  .commitments li:first-child { border-top: 1px solid rgba(90,53,69,0.2); }
+
+  .commit-num {
+    font-size: 9px; letter-spacing: 0.2em;
+    color: var(--pink-hot); padding-top: 2px;
+  }
+
+  .commit-text {
+    font-size: 12px; letter-spacing: 0.05em;
+    line-height: 1.9; color: var(--text);
+  }
+
+  .commit-text strong { color: var(--pink); font-weight: 400; }
+
+  /* ── CLOSING ── */
+  .closing {
+    margin-top: 80px;
+    padding-top: 48px;
+    border-top: 1px solid rgba(90,53,69,0.25);
+  }
+
+  .closing-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(22px, 3.5vw, 36px);
+    font-weight: 300; font-style: italic;
+    color: var(--pink);
+    line-height: 1.4;
+    margin-bottom: 32px;
+  }
+
+  .closing-sig {
+    font-size: 9px; letter-spacing: 0.3em;
+    color: var(--dim); text-transform: uppercase;
+  }
+
+  /* ── UNFOLD ── */
+  .unfold {
+    display: block;
+    font-size: 0.68rem; letter-spacing: 0.5em;
+    color: var(--text); text-transform: lowercase;
+    margin-top: 64px; text-align: center;
+  }
+
+  .unfold-word { color: var(--pink); }
+
+  /* ── FOOTER ── */
+  footer {
+    margin-top: 64px; padding: 40px;
+    font-size: 9px; letter-spacing: 0.2em;
+    color: var(--dim); text-transform: uppercase;
+    text-align: center; border-top: 1px solid rgba(90,53,69,0.15);
+    position: relative; z-index: 1;
+  }
+
+  /* ── FADE IN ── */
+  .fade-in {
+    opacity: 0; transform: translateY(16px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── MOBILE ── */
+  @media (max-width: 600px) {
+    nav { padding: 16px 20px; }
+    .page { padding: 110px 24px 80px; }
+    .pillars { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="index.html">Lyra's Winter</a>
+</nav>
+
+<div class="page">
+
+  <div class="manifesto-label fade-in">Brand Manifesto</div>
+
+  <h1 class="manifesto-title fade-in">
+    Half wildfire,<br>half <em>wildflower.</em>
+  </h1>
+
+  <div class="rule fade-in"></div>
+
+  <div class="manifesto-body">
+
+    <p class="lead fade-in">
+      I am an artist. Not as a job title I aspire to, or a personality trait I've decided sounds nice — it's the closest thing I have to a biological fact. I have never gone a single stretch of life without making something. Multiple projects, always. Probably too many. Absolutely zero regrets.
+    </p>
+
+    <p class="fade-in">
+      Art is the centre of gravity here. Everything else — the streaming, the fashion, the ink slowly covering my skin — orbits that. My body is a canvas I'm filling deliberately, each piece a marker on a spiritual and personal journey I'm choosing to take in public. My clothes are an extension of the same impulse. Streaming is the one place I show up just to have fun and refuse to justify it further than that.
+    </p>
+
+    <p class="fade-in">
+      The brand is called Lyra's Winter. You can think of it as a place — <em>here in Lyra's Winter, art blooms</em> — or just as me, Lyra, doing what I do. Either works. The name has always felt like both.
+    </p>
+
+    <div class="section-marker fade-in"><span>What this is</span></div>
+
+    <div class="pillars fade-in">
+      <div class="pillar">
+        <div class="pillar-name">Art</div>
+        <div class="pillar-note">The centre. Scale maille, ceramics, sumi-e, printmaking, sculpture — if it exists as a medium I have probably tried it and immediately started a project in it.</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-name">Streaming</div>
+        <div class="pillar-note">Pure joy. Community without an agenda. I play games, I talk to people, I have a good time. That's it. That's the whole pitch.</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-name">Fashion &amp; Lifestyle</div>
+        <div class="pillar-note">Expression as a daily practice. What I wear is part of the same creative language as everything I make. The aesthetic isn't accidental.</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-name">Tattoos</div>
+        <div class="pillar-note">My body as a living record of who I am, where I've been, and what I believe in. A spiritual practice that happens to look incredible.</div>
+      </div>
+    </div>
+
+    <div class="section-marker fade-in"><span>Why I'm doing this publicly</span></div>
+
+    <p class="fade-in">
+      Transparency isn't a brand strategy. It's accountability. If I put my values in writing and then quietly abandon them the moment something profitable comes along, I'd like to be findable. This document exists so that you — whether you're a potential collaborator, a commissioner, someone considering streaming with me, or just someone who stumbled in — know exactly who you're dealing with before we go any further.
+    </p>
+
+    <p class="fade-in">
+      I'm still building this. I'm not going to pretend otherwise, because pretending otherwise would be the first crack in everything I'm trying to hold together. The story is unfolding in real time. You're welcome to watch.
+    </p>
+
+    <div class="section-marker fade-in"><span>What I will not do</span></div>
+
+    <ul class="commitments fade-in">
+      <li>
+        <span class="commit-num">01</span>
+        <span class="commit-text"><strong>I won't step on anyone to get somewhere.</strong> Collaboration over competition, always. The creative world is not a pie with a fixed number of slices and I refuse to act like it is.</span>
+      </li>
+      <li>
+        <span class="commit-num">02</span>
+        <span class="commit-text"><strong>I won't exploit people.</strong> Not my audience, not collaborators, not anyone who works with me as this grows. It might seem obvious. It apparently isn't, once money gets involved. Consider this a pre-commitment.</span>
+      </li>
+      <li>
+        <span class="commit-num">03</span>
+        <span class="commit-text"><strong>I won't trade my values for gain.</strong> Monetary, social, or otherwise. If a deal, a partnership, or an opportunity requires me to become someone I don't recognise, the answer is no. This one is non-negotiable and I say that knowing full well it will cost me something eventually.</span>
+      </li>
+      <li>
+        <span class="commit-num">04</span>
+        <span class="commit-text"><strong>I won't stop being authentically myself.</strong> Which, to be clear, includes swearing. And the pink aesthetic. And the dry humour. And the very specific opinions about things that probably don't matter. You get the whole thing or nothing.</span>
+      </li>
+    </ul>
+
+    <div class="section-marker fade-in"><span>What I'm actually trying to build</span></div>
+
+    <p class="fade-in">
+      Something that leaves things better than it found them. Not through lectures or manifestos about changing the world — I find that exhausting to read and I imagine you do too. More through the quiet accumulation of choices made with integrity. Decent pay for decent work. Credit where it's due. Space made for other people to create without having to fight for it.
+    </p>
+
+    <p class="fade-in">
+      I don't have all the answers. I have good instincts, a stubborn commitment to figuring things out, and a very large backlog of projects. That's probably enough to start with.
+    </p>
+
+  </div>
+
+  <div class="closing fade-in">
+    <div class="closing-sig">Lyra's Winter &nbsp;·&nbsp; est. 2026</div>
+  </div>
+
+  <span class="unfold fade-in">The story <span class="unfold-word">u n f o l d i n g.</span></span>
+
+</div>
+
+<footer>© 2026 Lyra's Winter &nbsp;·&nbsp; lyraswinter.art</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+
+  document.querySelectorAll('.fade-in').forEach((el, i) => {
+    el.style.transitionDelay = i < 4 ? `${i * 0.12}s` : '0s';
+    observer.observe(el);
+  });
+</script>
+
+</body>
+</html>
