@@ -32,27 +32,12 @@
     pointer-events: none;
   }
 
-  /* ── NAV ── */
-  nav {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-    padding: 18px 40px;
-    display: flex; align-items: center; justify-content: space-between;
-    background: linear-gradient(to bottom, rgba(8,8,8,0.95) 0%, transparent 100%);
-  }
-
-  .nav-logo {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 16px; font-weight: 300;
-    letter-spacing: 0.2em; color: var(--pink);
-    text-decoration: none; text-transform: uppercase;
-  }
-
   /* ── LAYOUT ── */
   .page {
     position: relative; z-index: 1;
     max-width: 780px;
     margin: 0 auto;
-    padding: 140px 40px 120px;
+    padding: 72px 40px 120px;
   }
 
   /* ── HEADER ── */
@@ -241,17 +226,12 @@
 
   /* ── MOBILE ── */
   @media (max-width: 600px) {
-    nav { padding: 16px 20px; }
-    .page { padding: 110px 24px 80px; }
+    .page { padding: 64px 24px 80px; }
     .pillars { grid-template-columns: 1fr; }
   }
 </style>
 </head>
 <body>
-
-<nav>
-  <a class="nav-logo" href="index.html">Lyra's Winter</a>
-</nav>
 
 <div class="page">
 
@@ -349,7 +329,7 @@
 
 </div>
 
-<footer>© 2026 Lyra's Winter &nbsp;·&nbsp; lyraswinter.art</footer>
+<footer>© 2026 Lyra's Winter</footer>
 
 <script>
   const observer = new IntersectionObserver((entries) => {
