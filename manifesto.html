@@ -32,12 +32,27 @@
     pointer-events: none;
   }
 
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 18px 40px;
+    display: flex; align-items: center; justify-content: space-between;
+    background: linear-gradient(to bottom, rgba(8,8,8,0.95) 0%, transparent 100%);
+  }
+
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px; font-weight: 300;
+    letter-spacing: 0.2em; color: var(--pink);
+    text-decoration: none; text-transform: uppercase;
+  }
+
   /* ── LAYOUT ── */
   .page {
     position: relative; z-index: 1;
     max-width: 780px;
     margin: 0 auto;
-    padding: 72px 40px 120px;
+    padding: 140px 40px 120px;
   }
 
   /* ── HEADER ── */
@@ -59,6 +74,7 @@
   .manifesto-title em {
     color: var(--pink);
     font-style: normal;
+    letter-spacing: 0.12em;
   }
 
   /* ── RULE ── */
@@ -70,8 +86,8 @@
 
   /* ── BODY TEXT ── */
   .manifesto-body p {
-    font-size: 11px;
-    line-height: 2.1;
+    font-size: 13px;
+    line-height: 2;
     letter-spacing: 0.04em;
     color: var(--text);
     margin-bottom: 2em;
@@ -80,7 +96,7 @@
   .manifesto-body p.lead {
     font-family: 'Cormorant Garamond', serif;
     font-weight: 300;
-    font-size: clamp(16px, 2.4vw, 22px);
+    font-size: clamp(18px, 2.8vw, 26px);
     line-height: 1.6;
     color: var(--white);
     font-style: italic;
@@ -170,7 +186,7 @@
   }
 
   .commit-text {
-    font-size: 10px; letter-spacing: 0.05em;
+    font-size: 12px; letter-spacing: 0.05em;
     line-height: 1.9; color: var(--text);
   }
 
@@ -233,12 +249,16 @@
 </head>
 <body>
 
+<nav>
+  <a class="nav-logo" href="index.html">Lyra's Winter</a>
+</nav>
+
 <div class="page">
 
   <div class="manifesto-label fade-in">Brand Manifesto</div>
 
   <h1 class="manifesto-title fade-in">
-    Half wildfire,<br>half <em>wildflower.</em>
+    The fairytale<br><em>u n f o l d i n g.</em>
   </h1>
 
   <div class="rule fade-in"></div>
@@ -325,11 +345,11 @@
     <div class="closing-sig">Lyra's Winter &nbsp;·&nbsp; est. 2026</div>
   </div>
 
-  <span class="unfold fade-in">The story <span class="unfold-word">u n f o l d i n g.</span></span>
+  <span class="unfold fade-in">The fairytale <span class="unfold-word">u n f o l d i n g.</span></span>
 
 </div>
 
-<footer>© 2026 Lyra's Winter</footer>
+<footer>© 2026 Lyra's Winter &nbsp;·&nbsp; lyraswinter.art</footer>
 
 <script>
   const observer = new IntersectionObserver((entries) => {
