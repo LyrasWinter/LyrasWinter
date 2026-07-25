@@ -359,9 +359,20 @@
   .read-more-btn:hover { color: var(--pink); }
 
   /* poem-styled long entries — keep the poem's own type scale in preview/full */
-  .entry-body.long.poem .entry-preview,
-  .entry-body.long.poem .entry-full {
+  .entry-body.long.poem-verse .entry-preview,
+  .entry-body.long.poem-verse .entry-full {
     font-size: clamp(13px, 1.8vw, 16px);
+  }
+
+  /* tighter stanza spacing than prose paragraphs */
+  .entry-body.long.poem-verse .entry-preview p,
+  .entry-body.long.poem-verse .entry-full p {
+    margin-bottom: 0.5em;
+  }
+
+  /* pull the poem title closer to its first stanza */
+  .entry-title.poem-title {
+    margin-bottom: 10px;
   }
 
   .read-more-btn::before {
@@ -470,8 +481,8 @@ Line breaks are preserved for poems.
   <!-- POEM ENTRY — Wuthering, 21/07/2026 -->
   <div class="entry">
     <div class="entry-meta">21 · 07 · 2026</div>
-    <div class="entry-title">Wuthering</div>
-    <div class="entry-body long poem">
+    <div class="entry-title poem-title">Wuthering</div>
+    <div class="entry-body long poem-verse">
       <div class="entry-preview">
         <p>Sickening wrench,<br>buried within my chest.<br>An internal collapse,<br>intentions too naive, perhaps?</p>
         <p>Desperation to belong,<br>terrible feeling I've experienced lifelong.<br>Seeping desire to feel warm and wanted,<br>yet in reality it feels as if I'm being hunted.</p>
