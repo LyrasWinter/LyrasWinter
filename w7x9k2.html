@@ -355,6 +355,12 @@
 
   .read-more-btn:hover { color: var(--pink); }
 
+  /* poem-styled long entries — keep the poem's own type scale in preview/full */
+  .entry-body.long.poem .entry-preview,
+  .entry-body.long.poem .entry-full {
+    font-size: clamp(13px, 1.8vw, 16px);
+  }
+
   .read-more-btn::before {
     content: '· · · ';
     margin-right: 4px;
@@ -462,7 +468,7 @@ Line breaks are preserved for poems.
   <div class="entry">
     <div class="entry-meta">21 · 07 · 2026</div>
     <div class="entry-title">Wuthering</div>
-    <div class="entry-body long">
+    <div class="entry-body long poem">
       <div class="entry-preview">
         <p>Sickening wrench,<br>buried within my chest.<br>An internal collapse,<br>intentions too naive, perhaps?</p>
         <p>Desperation to belong,<br>terrible feeling I've experienced lifelong.<br>Seeping desire to feel warm and wanted,<br>yet in reality it feels as if I'm being hunted.</p>
