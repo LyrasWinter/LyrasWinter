@@ -356,10 +356,20 @@
 
   .read-more-btn:hover { color: var(--pink); }
 
-  /* poem-styled long entries — now matches the standard preview/full type scale */
+  /* poem-styled long entries — now matches the standard preview/full type scale, two columns to match Untitled Poem */
   .entry-body.long.poem-verse .entry-preview,
   .entry-body.long.poem-verse .entry-full {
     font-size: clamp(17px, 2.5vw, 21px);
+    column-count: 2;
+    column-gap: 48px;
+    column-rule: 1px solid #150a0e;
+  }
+
+  @media (max-width: 600px) {
+    .entry-body.long.poem-verse .entry-preview,
+    .entry-body.long.poem-verse .entry-full {
+      column-count: 1;
+    }
   }
 
   /* stanza gap — doubled to match a full two-line break, same as Untitled Poem's double blank line */
